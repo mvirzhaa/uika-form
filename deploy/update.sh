@@ -11,3 +11,4 @@ echo "=== Rebuild & restart container ==="
 docker compose up -d --build
 
 echo "=== Update selesai! ==="
+

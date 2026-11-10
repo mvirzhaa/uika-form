@@ -149,10 +149,11 @@ small{color:#b45309}</style>
   }
   app.all('/auth/logout', (req, res) => {
     res.clearCookie(auth.COOKIE, { path: '/' });
+    const target = config.SSO.eportalUrl || 'https://eportal.uika-bogor.ac.id';
     if (req.method === 'GET' || !req.xhr) {
-      return res.redirect(config.SSO.eportalUrl || '/');
+      return res.redirect(target);
     }
-    res.json({ ok: true, redirect: config.SSO.eportalUrl || '/' });
+    res.json({ ok: true, redirect: target });
   });
 
   /* ---------- API ---------- */

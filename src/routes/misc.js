@@ -14,6 +14,7 @@ router.get('/me', (req, res) => {
     login: { sso: auth.ssoEnabled(), oidc: auth.oidcEnabled(), dev: config.DEV_LOGIN },
     org: config.ORG_NAME,
     base_url: config.BASE_URL,
+    eportal_url: config.SSO.eportalUrl || 'https://eportal.uika-bogor.ac.id',
   });
 });
 

@@ -55,10 +55,11 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-async function upsertUser({ sub, email, name, identifier }) {
+async function upsertUser({ sub, email, name, identifier, role }) {
   email = String(email || '').trim().toLowerCase();
   if (!email) throw new Error('email tidak tersedia dari penyedia identitas');
-  const role = config.ADMIN_EMAILS.includes(email) ? 'admin' : config.DEFAULT_ROLE;
+  const isAdmin = config.ADMIN_EMAILS.includes(email);
+  const targetRole = isAdmin ? 'admin' : (role || config.DEFAULT_ROLE);
   const r = await q(
     `INSERT INTO users (sub, email, name, identifier, role, last_login)
      VALUES ($1,$2,$3,$4,$5, now())
@@ -66,10 +67,10 @@ async function upsertUser({ sub, email, name, identifier }) {
        SET sub = COALESCE(EXCLUDED.sub, users.sub),
            name = CASE WHEN EXCLUDED.name <> '' THEN EXCLUDED.name ELSE users.name END,
            identifier = CASE WHEN EXCLUDED.identifier <> '' THEN EXCLUDED.identifier ELSE users.identifier END,
-           role = CASE WHEN $6 THEN 'admin' ELSE users.role END,
+           role = EXCLUDED.role,
            last_login = now()
      RETURNING id, email, name, identifier, role`,
-    [sub || null, email, String(name || '').slice(0, 200), String(identifier || '').slice(0, 60), role, config.ADMIN_EMAILS.includes(email)],
+    [sub || null, email, String(name || '').slice(0, 200), String(identifier || '').slice(0, 60), targetRole],
   );
   return r.rows[0];
 }

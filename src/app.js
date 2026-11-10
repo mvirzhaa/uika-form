@@ -69,11 +69,25 @@ function createApp() {
         const name = u.name || email.split('@')[0];
         const identifier = u.nidn || u.npm || u.nip || '';
 
+        // Tentukan role pengguna berdasarkan permissions & role institusional E-Portal
+        const perms = data.access?.permissions || [];
+        const instRole = String(u.institutional_role || data.access?.role_name || '').toLowerCase();
+        let assignedRole = config.DEFAULT_ROLE;
+
+        if (config.ADMIN_EMAILS.includes(email.toLowerCase()) || perms.includes('u-form.manage') || instRole === 'admin') {
+          assignedRole = 'admin';
+        } else if (perms.includes('u-form.create') || perms.includes('*')) {
+          assignedRole = 'creator';
+        } else if (instRole === 'mahasiswa' || perms.includes('u-form.view')) {
+          assignedRole = 'user';
+        }
+
         const user = await auth.upsertUser({
           sub: String(u.user_id || u.sso_id || ''),
           email,
           name,
           identifier,
+          role: assignedRole,
         });
 
         auth.setSession(res, await auth.signSession(user.id));

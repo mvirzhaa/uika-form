@@ -269,13 +269,5 @@ export function userMenu() {
     session.user.role !== 'user' && link('/banks', { class: 'btn sm ghost hide-sm' }, 'Bank soal'),
     session.user.role === 'admin' && link('/admin', { class: 'btn sm ghost hide-sm' }, 'Admin'),
     h('span', { class: 'small muted hide-sm', title: u.email }, u.name || u.email),
-    h('button', { class: 'btn icon', title: 'Keluar', onclick: async () => {
-      try {
-        const r = await api('POST', '/auth/logout');
-        session.user = null;
-        location.href = r?.redirect || session.eportal_url || 'https://eportal.uika-bogor.ac.id';
-      } catch {
-        location.href = session.eportal_url || 'https://eportal.uika-bogor.ac.id';
-      }
-    } }, icon('logout')));
+    h('a', { class: 'btn icon', title: 'Keluar', href: '/auth/logout' }, icon('logout')));
 }

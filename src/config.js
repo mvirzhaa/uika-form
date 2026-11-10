@@ -28,6 +28,15 @@ module.exports = {
   DEV_LOGIN: bool(env.DEV_LOGIN),
   ADMIN_EMAILS: list(env.ADMIN_EMAILS),
   DEFAULT_ROLE: ['creator', 'user'].includes(env.DEFAULT_ROLE) ? env.DEFAULT_ROLE : 'creator',
+  SSO: {
+    enabled: bool(env.SSO_ENABLED, true),
+    baseUrl: (env.SSO_BASE_URL || 'https://eportal.uika-bogor.ac.id/eportal-api/api').replace(/\/+$/, ''),
+    eportalUrl: (env.EPORTAL_URL || 'https://eportal.uika-bogor.ac.id').replace(/\/+$/, ''),
+    clientId: env.SSO_CLIENT_ID || '',
+    clientSecret: env.SSO_CLIENT_SECRET || '',
+    appModuleId: env.SSO_APP_MODULE_ID || '',
+    jwtSecret: env.SSO_JWT_SECRET || '1dWQ0OI7YN7hI1z5CzsXibynSgddURH1pY6a9KaCyPPAVdXLFP4D4RMSZqrq1GIw',
+  },
   OIDC: {
     issuer: (env.OIDC_ISSUER || '').replace(/\/+$/, ''),
     clientId: env.OIDC_CLIENT_ID || '',

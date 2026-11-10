@@ -14,6 +14,8 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
+    extra_hosts:
+      eportal.uika-bogor.ac.id: "172.16.18.141"
     environment:
       - DATABASE_URL=postgres://uikaform:uikaform@db:5432/uikaform
     depends_on: [db]

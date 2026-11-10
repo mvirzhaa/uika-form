@@ -54,14 +54,57 @@ function createApp() {
 
   app.use(auth.loadUser);
 
+  /* ---------- integrasi SSO E-Portal UIKA (?token=...) ---------- */
+  app.use(async (req, res, next) => {
+    const token = req.query.token;
+    if (token && typeof token === 'string' && config.SSO && config.SSO.enabled) {
+      try {
+        const data = await auth.introspectToken(token, req.query.appModule_id);
+        if (!data || !data.valid) throw new Error(data?.message || 'Token SSO tidak valid.');
+        const isAuthorized = data.access?.has_access ?? true;
+        if (!isAuthorized) throw new Error('Akun Anda tidak memiliki izin untuk mengakses modul UIKA Form.');
+
+        const u = data.user || {};
+        const email = u.email || `${u.user_id || u.sso_id}@uika-bogor.ac.id`;
+        const name = u.name || email.split('@')[0];
+        const identifier = u.nidn || u.npm || u.nip || '';
+
+        const user = await auth.upsertUser({
+          sub: String(u.user_id || u.sso_id || ''),
+          email,
+          name,
+          identifier,
+        });
+
+        auth.setSession(res, await auth.signSession(user.id));
+
+        // Bersihkan token dari URL di address bar
+        const cleanUrl = req.path || '/';
+        return res.redirect(cleanUrl);
+      } catch (err) {
+        console.error('[sso] Login SSO gagal:', err.message);
+        return res.status(401).send(`<!doctype html><meta charset="utf-8"><title>Autentikasi E-Portal Gagal</title>
+<div style="font-family:system-ui,-apple-system,sans-serif;max-width:480px;margin:80px auto;padding:32px;border:1px solid #e2e8f0;border-radius:16px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.05)">
+  <h2 style="color:#e11d48;margin-top:0">Login SSO Gagal</h2>
+  <p style="color:#475569;line-height:1.6">${err.message}</p>
+  <a href="${config.SSO.eportalUrl}" style="display:inline-block;margin-top:16px;padding:10px 24px;background:#0071e3;color:#fff;border-radius:10px;text-decoration:none;font-weight:600">Buka E-Portal UIKA</a>
+</div>`);
+      }
+    }
+    next();
+  });
+
   /* ---------- autentikasi ---------- */
   const authLimiter = rateLimit({ windowMs: 60 * 1000, limit: 60, standardHeaders: 'draft-7', legacyHeaders: false });
   app.get('/auth/login', authLimiter, async (req, res) => {
+    if (auth.ssoEnabled()) {
+      return res.redirect(config.SSO.eportalUrl);
+    }
     if (auth.oidcEnabled()) {
       try { return await auth.startOidc(req, res); } catch (e) { return res.status(502).send(`Login E-Portal gagal dimulai: ${e.message}`); }
     }
     if (config.DEV_LOGIN) return res.redirect(`/auth/dev?next=${encodeURIComponent(auth.safeNext(req.query.next))}`);
-    return res.status(503).send('Login belum dikonfigurasi (isi OIDC_ISSUER dan OIDC_CLIENT_ID).');
+    return res.status(503).send('Login belum dikonfigurasi (isi SSO_CLIENT_ID atau OIDC_CLIENT_ID).');
   });
   app.get('/auth/callback', authLimiter, async (req, res) => {
     try { await auth.finishOidc(req, res); } catch (e) {
@@ -90,7 +133,13 @@ small{color:#b45309}</style>
       return res.redirect(auth.safeNext(req.body.next));
     });
   }
-  app.post('/auth/logout', (req, res) => { res.clearCookie(auth.COOKIE, { path: '/' }); res.json({ ok: true }); });
+  app.all('/auth/logout', (req, res) => {
+    res.clearCookie(auth.COOKIE, { path: '/' });
+    if (req.method === 'GET' || !req.xhr) {
+      return res.redirect(config.SSO.eportalUrl || '/');
+    }
+    res.json({ ok: true, redirect: config.SSO.eportalUrl || '/' });
+  });
 
   /* ---------- API ---------- */
   app.use('/api/public', require('./routes/public'));

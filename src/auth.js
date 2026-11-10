@@ -74,6 +74,115 @@ async function upsertUser({ sub, email, name, identifier }) {
   return r.rows[0];
 }
 
+/* ---------- SSO E-Portal UIKA (Introspect Token) ---------- */
+const ssoEnabled = () => !!(config.SSO && config.SSO.enabled && config.SSO.clientId);
+
+async function introspectToken(token, appModuleId) {
+  let targetModuleId = appModuleId || config.SSO.appModuleId;
+
+  // Ekstrak metadata dari token jika ada
+  let tokenIss = null;
+  try {
+    const parts = (token || '').split('.');
+    if (parts.length >= 2) {
+      const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
+      if (payload.iss && typeof payload.iss === 'string') tokenIss = payload.iss;
+      if (!targetModuleId && payload.appModule_id) targetModuleId = payload.appModule_id;
+    }
+  } catch {}
+
+  const candidates = [];
+  const base = (config.SSO.baseUrl || '').replace(/\/+$/, '');
+  if (base) {
+    if (base.endsWith('/api') || base.includes('/api/')) {
+      candidates.push(`${base}/sso/introspect`);
+    } else {
+      candidates.push(`${base}/eportal-api/api/sso/introspect`);
+      candidates.push(`${base}/api/sso/introspect`);
+      candidates.push(`${base}/sso/introspect`);
+    }
+  }
+  candidates.push('https://eportal.uika-bogor.ac.id/eportal-api/api/sso/introspect');
+  candidates.push('http://eportal.uika-bogor.ac.id/eportal-api/api/sso/introspect');
+  candidates.push('https://eportal.uika-bogor.ac.id/api/sso/introspect');
+  candidates.push('http://eportal.uika-bogor.ac.id/api/sso/introspect');
+  candidates.push('http://172.16.18.141/eportal-api/api/sso/introspect');
+  candidates.push('http://172.16.18.141/api/sso/introspect');
+
+  const uniqueCandidates = [...new Set(candidates)];
+  let lastError = null;
+
+  for (const candidateBase of uniqueCandidates) {
+    try {
+      const url = new URL(candidateBase);
+      if (targetModuleId) url.searchParams.set('appModule_id', targetModuleId);
+
+      const res = await fetch(url.toString(), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-SSO-Client-ID': config.SSO.clientId,
+          'X-SSO-Client-Secret': config.SSO.clientSecret,
+          Host: 'eportal.uika-bogor.ac.id',
+          Accept: 'application/json',
+        },
+        signal: AbortSignal.timeout(10000),
+      });
+
+      if (res.status === 404) {
+        lastError = new Error(`Endpoint tidak ditemukan (404) di ${url.origin}${url.pathname}`);
+        continue;
+      }
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        const msg = body?.message || `HTTP ${res.status}`;
+        lastError = new Error(`SSO introspect gagal: ${msg}`);
+        continue;
+      }
+      return body;
+    } catch (err) {
+      lastError = err;
+      continue;
+    }
+  }
+
+  // Fallback validasi tanda tangan JWT jika HTTP introspect terkendala jaringan kampus
+  if (config.SSO.jwtSecret) {
+    try {
+      const parts = (token || '').split('.');
+      if (parts.length === 3) {
+        const [headerB64, payloadB64, sigB64] = parts;
+        const expectedSig = crypto.createHmac('sha256', config.SSO.jwtSecret).update(`${headerB64}.${payloadB64}`).digest('base64url');
+        if (sigB64.length === expectedSig.length && crypto.timingSafeEqual(Buffer.from(sigB64), Buffer.from(expectedSig))) {
+          const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+          if (!payload.exp || payload.exp * 1000 >= Date.now()) {
+            return {
+              valid: true,
+              user: {
+                user_id: payload.id || payload.sub,
+                email: payload.email || '',
+                name: payload.name || payload.email?.split('@')[0] || 'Pengguna E-Portal',
+                institutional_role: payload.role || 'user',
+                nidn: payload.nidn || null,
+                npm: payload.npm || null,
+                nip: payload.nip || null,
+              },
+              access: {
+                has_access: true,
+                role_name: payload.role_name || payload.role,
+                unit_name: payload.unit_name,
+                permissions: payload.permissions || ['*'],
+              },
+            };
+          }
+        }
+      }
+    } catch {}
+  }
+
+  throw lastError || new Error('SSO introspect gagal: semua endpoint tidak dapat dihubungi');
+}
+
 /* ---------- OIDC (Authorization Code + PKCE) ---------- */
 let discovery = null;
 let jwks = null;
@@ -142,5 +251,5 @@ async function finishOidc(req, res) {
 
 module.exports = {
   loadUser, requireUser, requireCreator, requireAdmin, upsertUser, signSession, setSession,
-  startOidc, finishOidc, oidcEnabled, safeNext, COOKIE,
+  introspectToken, ssoEnabled, startOidc, finishOidc, oidcEnabled, safeNext, COOKIE,
 };

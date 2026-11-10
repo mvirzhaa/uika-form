@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/me', (req, res) => {
   res.json({
     user: req.user,
-    login: { oidc: auth.oidcEnabled(), dev: config.DEV_LOGIN },
+    login: { sso: auth.ssoEnabled(), oidc: auth.oidcEnabled(), dev: config.DEV_LOGIN },
     org: config.ORG_NAME,
     base_url: config.BASE_URL,
   });

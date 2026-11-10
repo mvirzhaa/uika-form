@@ -200,8 +200,17 @@ small{color:#b45309}</style>
 
   /* ---------- berkas statis + SPA ---------- */
   app.use('/vendor/chart.js', express.static(path.join(__dirname, '..', 'node_modules', 'chart.js', 'dist', 'chart.umd.js'), { maxAge: '7d' }));
-  app.use(express.static(path.join(__dirname, '..', 'public'), { maxAge: 0, etag: true }));
+  app.use(express.static(path.join(__dirname, '..', 'public'), {
+    maxAge: 0,
+    etag: false,
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.html') || filePath.endsWith('.js')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      }
+    },
+  }));
   app.get(/^\/(?!api\/|auth\/|uploads\/|vendor\/).*/, (_req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
   });
 

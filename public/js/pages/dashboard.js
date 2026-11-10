@@ -62,14 +62,14 @@ export async function dashboardPage(root) {
 
 function landing(root) {
   const feat = (ic, t, d) => h('div', { class: 'card' }, h('div', { class: 'logo', style: { width: '40px', height: '40px', borderRadius: '12px', marginBottom: '12px' } }, icon(ic)), h('h3', null, t), h('p', { class: 'muted small', style: { margin: 0 } }, d));
-  const hasLogin = session.login && (session.login.oidc || session.login.dev);
+  const hasLogin = session.login && (session.login.sso || session.login.oidc || session.login.dev);
   root.append(h('main', { class: 'page' },
     h('section', { style: { textAlign: 'center', padding: '48px 0 28px' } },
       h('div', { class: 'logo', style: { width: '72px', height: '72px', borderRadius: '20px', margin: '0 auto 18px' } }, icon('list', 36)),
       h('h1', { style: { fontSize: 'clamp(34px,7vw,56px)', fontWeight: 700 } }, 'Survei, formulir, dan kuis.'),
       h('p', { class: 'muted', style: { fontSize: '19px', maxWidth: '560px', margin: '14px auto 24px' } }, 'Buat dalam hitungan menit, nilai otomatis, dan terbitkan sertifikat berkode QR untuk setiap peserta.'),
       h('div', { class: 'row wrap', style: { justifyContent: 'center' } },
-        hasLogin ? h('a', { class: 'btn primary lg', href: loginUrl('/') }, 'Masuk dengan E-Portal') : h('p', { class: 'muted small' }, 'Login belum dikonfigurasi di server ini.'),
+        hasLogin ? h('a', { class: 'btn primary lg', href: loginUrl('/') }, 'Masuk dengan E-Portal') : h('a', { class: 'btn primary lg', href: session.eportal_url || 'https://eportal.uika-bogor.ac.id' }, 'Masuk dengan E-Portal'),
         link('/verify', { class: 'btn lg' }, icon('qr'), 'Verifikasi sertifikat'))),
     h('div', { class: 'grid', style: { marginTop: '24px' } },
       feat('list', 'Seperti Google Form', 'Pilihan ganda, kotak centang, dropdown, skala, esai, tanggal, dan waktu.'),

@@ -91,7 +91,10 @@ export async function loadSession() {
   try { Object.assign(session, await api('GET', '/api/me')); } catch { /* offline */ }
   return session;
 }
-export const loginUrl = (next = location.pathname + location.search) => `/auth/login?next=${encodeURIComponent(next)}`;
+export const loginUrl = (next = location.pathname + location.search) => {
+  if (session.eportal_url) return session.eportal_url;
+  return `/auth/login?next=${encodeURIComponent(next)}`;
+};
 
 /* ---------- router ---------- */
 const routes = [];
@@ -269,5 +272,13 @@ export function userMenu() {
     session.user.role !== 'user' && link('/banks', { class: 'btn sm ghost hide-sm' }, 'Bank soal'),
     session.user.role === 'admin' && link('/admin', { class: 'btn sm ghost hide-sm' }, 'Admin'),
     h('span', { class: 'small muted hide-sm', title: u.email }, u.name || u.email),
-    h('a', { class: 'btn icon', title: 'Keluar', href: '/auth/logout' }, icon('logout')));
+    h('a', {
+      class: 'btn icon',
+      title: 'Keluar',
+      href: '/auth/logout',
+      onclick: () => {
+        document.cookie = 'uf_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        window.location.href = '/auth/logout';
+      }
+    }, icon('logout')));
 }

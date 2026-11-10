@@ -74,11 +74,11 @@ function createApp() {
         const instRole = String(u.institutional_role || data.access?.role_name || '').toLowerCase();
         let assignedRole = config.DEFAULT_ROLE;
 
-        if (config.ADMIN_EMAILS.includes(email.toLowerCase()) || perms.includes('u-form.manage') || instRole === 'admin') {
+        if (config.ADMIN_EMAILS.includes(email.toLowerCase()) || perms.includes('u-form.manage') || instRole === 'admin' || instRole === 'super-admin') {
           assignedRole = 'admin';
         } else if (perms.includes('u-form.create') || perms.includes('*')) {
           assignedRole = 'creator';
-        } else if (instRole === 'mahasiswa' || perms.includes('u-form.view')) {
+        } else {
           assignedRole = 'user';
         }
 

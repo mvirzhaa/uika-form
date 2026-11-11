@@ -38,6 +38,13 @@ async function isEditor(user, formRow) {
 }
 
 /* ---------- baca formulir ---------- */
+/* Tata letak bawaan sertifikat (dipakai desainer visual di Editor) */
+router.get('/cert-layout', (req, res) => {
+  const { ELEMENTS, defaultLayout } = require('../certLayout');
+  res.setHeader('cache-control', 'public, max-age=300');
+  res.json({ elements: ELEMENTS, defaults: Object.fromEntries(['classic', 'modern', 'elegant', 'minimal'].map((t) => [t, defaultLayout(t)])) });
+});
+
 router.get('/forms/:slug', async (req, res) => {
   const f = await formBySlug(req.params.slug);
   if (!f) return res.status(404).json({ error: 'not_found' });

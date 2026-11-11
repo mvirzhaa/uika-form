@@ -237,10 +237,10 @@ export function shareExtras(c, fillUrl) {
   const shortUrl = () => `${location.origin}/s/${f.alias || f.slug}`;
   const draw = () => {
     clear(wrap);
-    const alias = h('input', { class: 'in', value: f.alias || '', placeholder: 'mis. kuis-pbo-2026', maxlength: 40, style: { flex: 1 } });
+    const alias = h('input', { class: 'in', value: f.alias || '', placeholder: 'mis. kuis-pbo-2026', maxlength: 40, style: { flex: '1 1 150px', minWidth: '0' } });
     const msg = h('div', { class: 'tiny', style: { minHeight: '16px', marginTop: '4px' } });
     wrap.append(h('h4', null, 'Tautan pendek'),
-      h('div', { class: 'row' }, h('span', { class: 'small muted', style: { whiteSpace: 'nowrap' } }, `${location.host}/s/`), alias,
+      h('div', { class: 'row wrap' }, h('span', { class: 'small muted', style: { whiteSpace: 'nowrap' } }, `${location.host}/s/`), alias,
         h('button', { class: 'btn sm', onclick: async () => {
           try { const r = await api('PUT', `/api/forms/${f.id}/alias`, { alias: alias.value }); f.alias = r.alias; toast(r.alias ? 'Alias disimpan' : 'Alias dihapus'); draw(); } catch (e) { msg.style.color = 'var(--danger)'; msg.textContent = errMsg(e); }
         } }, 'Simpan')), msg,
@@ -333,7 +333,7 @@ export function certTemplateCard(c, redraw) {
   const upd = () => { ex.textContent = (C.number_format || '').replace(/\{\{no(?::(\d))?\}\}/g, (_, n) => String(C.number_start || 1).padStart(Number(n || 0), '0')).replace('{{bulan}}', 'XI').replace('{{bulan_angka}}', '11').replace('{{tahun}}', String(new Date().getFullYear())) || '—'; };
   upd();
   return h('div', { class: 'card' }, h('h3', null, 'Templat & nomor sertifikat'),
-    h('div', { class: 'tpl-grid' }, tpls.map(([v, l]) => h('button', { class: `tpl ${C.template === v ? 'on' : ''}`, onclick: () => { C.template = v; c.touch(); redraw(); } }, h('i', { class: v }), l))),
+    h('div', { class: 'tpl-grid' }, tpls.map(([v, l]) => h('button', { class: `tpl ${C.template === v ? 'on' : ''}`, onclick: async () => { if (C.template === v) return; if (C.layout && !await confirmDialog('Ganti templat?', 'Posisi & ukuran elemen yang sudah Anda atur dikembalikan ke bawaan templat baru.', 'Ganti')) return; C.template = v; C.layout = null; c.touch(); redraw(); } }, h('i', { class: v }), l))),
     h('div', { style: { marginTop: '16px' } }, h('label', { class: 'f' }, 'Format nomor resmi (kosongkan bila tidak perlu)'),
       h('input', { class: 'in', value: C.number_format || '', maxlength: 100, placeholder: '{{no:3}}/UIKA/SERT/{{bulan}}/{{tahun}}', oninput: (e) => { C.number_format = e.target.value; upd(); c.touch(); } }),
       h('div', { class: 'row wrap', style: { marginTop: '6px' } }, h('span', { class: 'tiny muted' }, 'Sisipkan:'), ['{{no:3}}', '{{bulan}}', '{{bulan_angka}}', '{{tahun}}'].map((t) => h('button', { class: 'chipbtn', onclick: () => { C.number_format = `${C.number_format || ''}${t}`; c.touch(); redraw(); } }, t))),

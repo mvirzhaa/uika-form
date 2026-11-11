@@ -53,6 +53,8 @@ const ICONS = {
   send: 'M22 2L11 13M22 2l-7 20-4-9-9-4 22-7z', edit: 'M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z', shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
   heading: 'M6 4v16M18 4v16M6 12h12', file_plus: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 18v-6M9 15h6',
   qr: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3', refresh: 'M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  eyeoff: 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22',
   moon: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z', sun: 'M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42',
   half: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 2v20', table: 'M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18', grip: 'M9 5h.01M15 5h.01M9 12h.01M15 12h.01M9 19h.01M15 19h.01',
   bank: 'M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3', branch: 'M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9',
@@ -208,9 +210,19 @@ export function luminance(hex) {
   const n = parseInt(hex.slice(1), 16); const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
-export function applyTheme(el, theme) {
+/** Warna latar kanvas sesuai mode yang tampil (ikut pilihan pengguna bila berbeda dari mode formulir). */
+export function canvasBg(theme, mode) {
+  const formMode = theme.mode === 'dark' ? 'dark' : 'light';
+  if (mode === formMode) return theme.bg;
+  return mode === 'dark' ? `color-mix(in srgb, ${theme.bg} 14%, #0d0d0f)` : `color-mix(in srgb, ${theme.bg} 18%, #f2f2f7)`;
+}
+/** Terapkan tema formulir ke kanvas. follow=true → ikut tema aplikasi saat ini (halaman peserta); false → selalu mode formulir (Editor). */
+export function applyTheme(el, theme, { follow = true } = {}) {
+  const mode = follow ? currentTheme() : (theme.mode === 'dark' ? 'dark' : 'light');
+  el.classList.toggle('fx-dark', mode === 'dark');
   el.style.setProperty('--accent', theme.color);
-  el.style.setProperty('--canvas-bg', theme.bg);
+  el.style.setProperty('--canvas-bg', canvasBg(theme, mode));
+  el.dataset.mode = mode;
   el.style.setProperty('--on-accent', luminance(theme.color) > 0.6 ? '#1d1d1f' : '#ffffff');
   el.classList.remove('ff-serif', 'ff-rounded', 'ff-mono');
   if (theme.font && theme.font !== 'system') el.classList.add(`ff-${theme.font}`);
@@ -235,27 +247,33 @@ export function loadChart() {
 export const PALETTE = ['#0a84ff', '#30d158', '#ff9f0a', '#ff453a', '#bf5af2', '#64d2ff', '#ffd60a', '#ff375f', '#5e5ce6', '#8e8e93'];
 
 /* Bilah navigasi seragam */
-export function navbar({ left, center, right } = {}) {
+export function navbar({ left, center, right, prefsInMenu = false } = {}) {
   return h('header', { class: 'nav' },
     left || link('/', { class: 'brand' }, logo(), h('span', { class: 'hide-sm' }, 'UIKA Form')),
-    center ? h('div', { class: 'grow row', style: { justifyContent: 'center', minWidth: 0 } }, center) : h('div', { class: 'grow' }),
-    h('div', { class: 'row' }, right, prefButtons()));
+    center ? h('div', { class: 'grow row nav-center', style: { justifyContent: 'center', minWidth: 0 } }, center) : h('div', { class: 'grow' }),
+    h('div', { class: 'row nav-right' }, right, prefsInMenu ? h('div', { class: 'hide-sm' }, prefButtons()) : prefButtons()));
 }
-/* ---------- tema terang/gelap & bahasa ---------- */
+/* ---------- tema terang/gelap & bahasa ----------
+   Bawaan: terang. Pilihan pengguna (tombol matahari/bulan) disimpan; halaman formulir boleh
+   memberi tema bawaannya sendiri (mode formulir) selama pengguna belum memilih. */
 const THEME_KEY = 'uf:theme';
-export const getThemePref = () => { try { return localStorage.getItem(THEME_KEY) || 'auto'; } catch { return 'auto'; } };
+let pageTheme = null;
+const storedTheme = () => { try { const v = localStorage.getItem(THEME_KEY); return v === 'dark' || v === 'light' ? v : null; } catch { return null; } };
+export const currentTheme = () => (document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 export function applyThemePref() {
-  const p = getThemePref();
-  if (p === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', p);
+  document.documentElement.setAttribute('data-theme', storedTheme() || pageTheme || 'light');
+  document.querySelectorAll('[data-themebtn]').forEach((el) => el.replaceWith(themeButton()));
 }
+/** Tema bawaan halaman saat ini (mis. mode gelap formulir); null = kembali ke bawaan aplikasi. */
+export function setPageTheme(mode) { pageTheme = mode === 'dark' ? 'dark' : mode ? 'light' : null; applyThemePref(); }
 export function themeButton() {
-  const p = getThemePref();
-  const next = { auto: 'light', light: 'dark', dark: 'auto' }[p];
-  const label = { auto: 'Tema: otomatis', light: 'Tema: terang', dark: 'Tema: gelap' }[p];
+  const cur = currentTheme();
+  const next = cur === 'dark' ? 'light' : 'dark';
+  const label = cur === 'dark' ? 'Tema: gelap' : 'Tema: terang';
   return h('button', {
-    class: 'btn icon ghost', 'data-themebtn': '', title: label, 'aria-label': label,
-    onclick: () => { try { localStorage.setItem(THEME_KEY, next); } catch { /* abaikan */ } applyThemePref(); document.querySelectorAll('[data-themebtn]').forEach((el) => el.replaceWith(themeButton())); },
-  }, icon({ auto: 'half', light: 'sun', dark: 'moon' }[p]));
+    class: 'btn icon ghost', 'data-themebtn': '', title: `${label} — klik untuk ${next === 'dark' ? 'mode gelap' : 'mode terang'}`, 'aria-label': label,
+    onclick: () => { try { localStorage.setItem(THEME_KEY, next); } catch { /* abaikan */ } applyThemePref(); window.dispatchEvent(new Event('uf:themechange')); },
+  }, icon(cur === 'dark' ? 'moon' : 'sun'));
 }
 export function langButton() {
   const l = getLang();
@@ -264,21 +282,39 @@ export function langButton() {
 export const prefButtons = () => h('div', { class: 'iconbtn-nav' }, langButton(), themeButton());
 applyThemePref();
 
-export function userMenu() {
+export function userMenu({ compact = false } = {}) {
   const u = session.user;
   if (!u) return h('a', { class: 'btn primary sm', href: loginUrl() }, 'Masuk');
+  if (compact) return h('a', { class: 'btn icon', title: `Keluar (${u.email})`, href: '/auth/logout', onclick: (e) => { e.preventDefault(); logoutNow(); } }, icon('logout'));
   return h('div', { class: 'row' },
     session.user.role !== 'user' && link('/lists', { class: 'btn sm ghost hide-sm' }, 'Daftar pilihan'),
     session.user.role !== 'user' && link('/banks', { class: 'btn sm ghost hide-sm' }, 'Bank soal'),
     session.user.role === 'admin' && link('/admin', { class: 'btn sm ghost hide-sm' }, 'Admin'),
     h('span', { class: 'small muted hide-sm', title: u.email }, u.name || u.email),
-    h('a', {
-      class: 'btn icon',
-      title: 'Keluar',
-      href: '/auth/logout',
-      onclick: () => {
-        document.cookie = 'uf_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
-        window.location.href = '/auth/logout';
-      }
-    }, icon('logout')));
+    h('a', { class: 'btn icon hide-sm', title: 'Keluar', href: '/auth/logout', onclick: (e) => { e.preventDefault(); logoutNow(); } }, icon('logout')),
+    h('button', { class: 'btn icon show-sm', title: 'Menu', 'aria-label': 'Menu', onclick: () => navMenu() }, icon('more')));
+}
+export function logoutNow() {
+  document.cookie = 'uf_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  window.location.href = '/auth/logout';
+}
+/** Menu navigasi untuk HP (tautan yang disembunyikan di bilah atas layar kecil). */
+export function navMenu(extra = []) {
+  const u = session.user;
+  let m;
+  const go = (path) => () => { m.close(); navigate(path); };
+  const item = (ic, label, fn) => h('button', { class: 'menu-item', type: 'button', onclick: fn }, icon(ic, 20), h('span', { class: 'grow' }, label));
+  m = modal({
+    title: 'Menu',
+    body: h('div', { class: 'menu-list' },
+      u && h('div', { class: 'small muted', style: { paddingBottom: '8px' } }, u.name ? `${u.name} · ${u.email}` : u.email),
+      ...extra,
+      item('list', 'Formulir saya', go('/')),
+      u && u.role !== 'user' && item('drop', 'Daftar pilihan', go('/lists')),
+      u && u.role !== 'user' && item('bank', 'Bank soal', go('/banks')),
+      u && u.role === 'admin' && item('shield', 'Admin', go('/admin')),
+      item('award', 'Verifikasi sertifikat', go('/verify')),
+      u && item('logout', 'Keluar', logoutNow)),
+  });
+  return m;
 }

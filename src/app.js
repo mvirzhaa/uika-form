@@ -158,6 +158,7 @@ small{color:#b45309}</style>
   app.use('/api/forms', require('./routes/forms'));
   app.use('/api/lists', require('./routes/lists'));
   app.use('/api/banks', require('./routes/banks'));
+  app.use('/api/admin/forms', require('./routes/admin'));
   app.use('/api', require('./routes/misc'));
   app.use('/api', (_req, res) => res.status(404).json({ error: 'not_found' }));
 

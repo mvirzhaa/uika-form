@@ -1,5 +1,5 @@
 /* MODE PENGISIAN — tampilan yang dilihat peserta (juga dipakai sebagai pratinjau dari Editor). */
-import { h, clear, icon, api, ApiError, session, navbar, userMenu, link, toast, modal, confirmDialog, debounce, applyTheme, heroClass, heroStyle,
+import { h, clear, icon, api, ApiError, session, navbar, userMenu, link, toast, modal, confirmDialog, debounce, applyTheme, canvasBg, currentTheme, setPageTheme, heroClass, heroStyle,
   loginUrl, fmtMMSS, fmtDur, fmtDateTime, num, errMsg, logo } from '../core.js';
 import { applyLogic, isAnswered } from '../logic.js';
 import { setLang } from '../i18n.js';
@@ -27,10 +27,12 @@ export async function fillPage(root, { slug }, query) {
 
   /* ---------- kerangka ---------- */
   const shell = h('div', { class: 'fx', style: { minHeight: embed ? '' : '100vh' } });
-  applyTheme(shell, form.theme);
-  document.title = `${form.title} — UIKA Form`;
+  setPageTheme(form.theme.mode);
   const prevBg = document.body.style.background;
-  document.body.style.background = embed ? 'transparent' : form.theme.bg;
+  const paintTheme = () => { applyTheme(shell, form.theme); document.body.style.background = embed ? 'transparent' : canvasBg(form.theme, currentTheme()); };
+  paintTheme();
+  window.addEventListener('uf:themechange', paintTheme);
+  document.title = `${form.title} — UIKA Form`;
   const content = h('div', { class: 'canvas-in' });
   const canvas = h('div', { class: 'canvas' }, content);
   const banner = preview && h('div', { class: 'banner' }, icon('eye', 18), h('span', null, 'Mode Pengisian (pratinjau) — jawaban tidak disimpan dan tidak masuk rekap.'),
@@ -47,6 +49,7 @@ export async function fillPage(root, { slug }, query) {
     if (beforeUnload) window.removeEventListener('beforeunload', beforeUnload);
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
     document.body.style.background = prevBg; document.title = 'UIKA Form';
+    window.removeEventListener('uf:themechange', paintTheme); setPageTheme(null);
   };
 
   const hero = (extra) => h('section', { class: heroClass(form.theme), style: heroStyle(form.theme) },

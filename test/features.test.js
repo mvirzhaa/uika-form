@@ -317,3 +317,47 @@ test('template Excel memuat tipe Peringkat & Unggah Berkas dan dapat diimpor', a
   const types = imp.data.questions.map((x) => x.type);
   assert.ok(types.includes('ranking') && types.includes('file'));
 });
+
+test('admin: lihat semua formulir, cari kata kunci pertanyaan, detail, ekspor, hapus', async () => {
+  const f1 = await makeForm({ questions: [mcq('Berapa lama Anda belajar Python setiap minggu?'), { id: uid(), type: 'radio', title: 'Bahasa favorit', required: false, points: 0, correct: [], options: [{ id: 'a', text: 'Kotlin' }, { id: 'b', text: 'Golang' }] }] });
+  const f2 = await makeForm({ questions: [mcq('Apakah dosen tepat waktu?')] });
+  const o = await call('POST', '/api/forms', { user: other, body: { kind: 'form', title: 'Milik orang lain 100%_x' } });
+  // bukan admin ditolak
+  assert.equal((await call('GET', '/api/admin/forms', { user: owner })).status, 403);
+  assert.equal((await call('DELETE', `/api/admin/forms/${f1.id}`, { user: owner })).status, 403);
+  // semua formulir dari semua pembuat terlihat
+  const all = (await call('GET', '/api/admin/forms', { user: admin })).data;
+  const ids = all.rows.map((r) => r.id);
+  assert.ok(ids.includes(f1.id) && ids.includes(f2.id) && ids.includes(o.data.id));
+  assert.ok(all.rows.every((r) => r.owner_email));
+  // kata kunci di judul pertanyaan & teks opsi; tidak peka huruf besar
+  let r = (await call('GET', `/api/admin/forms?q=${encodeURIComponent('python')}&scope=question`, { user: admin })).data;
+  assert.deepEqual(r.rows.map((x) => x.id), [f1.id]);
+  assert.equal(r.rows[0].match_count, 1);
+  assert.match(r.rows[0].matches[0].title, /Python/);
+  r = (await call('GET', '/api/admin/forms?q=golang&scope=question', { user: admin })).data;
+  assert.deepEqual(r.rows.map((x) => x.id), [f1.id]);
+  r = (await call('GET', '/api/admin/forms?q=python&scope=title', { user: admin })).data;
+  assert.equal(r.total, 0);
+  // karakter wildcard SQL diperlakukan harfiah
+  r = (await call('GET', `/api/admin/forms?q=${encodeURIComponent('100%_x')}&scope=title`, { user: admin })).data;
+  assert.deepEqual(r.rows.map((x) => x.id), [o.data.id]);
+  r = (await call('GET', '/api/admin/forms?q=%25&scope=title', { user: admin })).data;
+  assert.ok(r.rows.every((x) => x.title.includes('%')));
+  // pencarian berdasarkan pembuat
+  r = (await call('GET', '/api/admin/forms?q=other%40uika&scope=owner', { user: admin })).data;
+  assert.ok(r.rows.length >= 1 && r.rows.every((x) => x.owner_email === 'other@uika-bogor.ac.id'));
+  // detail berisi semua pertanyaan
+  const d = (await call('GET', `/api/admin/forms/${f1.id}`, { user: admin })).data;
+  assert.equal(d.questions.length, 2); assert.equal(d.owner.email, 'owner@uika-bogor.ac.id');
+  assert.equal(d.questions[0].correct[0], 'a');
+  const x = await call('GET', `/api/admin/forms/${f1.id}/export.xlsx`, { user: admin });
+  assert.equal(x.status, 200); assert.equal(x.data.subarray(0, 2).toString(), 'PK');
+  // hapus satu & banyak
+  assert.equal((await call('DELETE', `/api/admin/forms/${f1.id}`, { user: admin })).status, 200);
+  assert.equal((await call('GET', `/api/admin/forms/${f1.id}`, { user: admin })).status, 404);
+  assert.equal((await call('GET', `/api/forms/${f1.id}`, { user: owner })).status, 404);
+  const del = await call('POST', '/api/admin/forms/delete', { user: admin, body: { ids: [f2.id, o.data.id, 'bukan-uuid'] } });
+  assert.equal(del.data.deleted, 2);
+  assert.equal((await call('POST', '/api/admin/forms/delete', { user: admin, body: { ids: [] } })).status, 422);
+});

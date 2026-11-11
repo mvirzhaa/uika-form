@@ -14,6 +14,7 @@ Node.js 20+ · Express · PostgreSQL · SPA tanpa build.
 - **Template Excel** (survei & kuis) untuk diunduh, diisi, lalu diimpor kembali.
 - **Siapa yang bisa mengisi**: tanpa login pun bisa (cukup nama + email); yang sudah masuk E-Portal terisi otomatis. Per form dapat dipilih *Wajib login E-Portal* atau *Anonim*.
 - **Membuat/mengelola form wajib login E-Portal.**
+- **Admin › Formulir**: tabel semua formulir dari semua pembuat (pembuat, jenis, status, jumlah soal & respons, terakhir diubah), pencarian kata kunci pada pertanyaan (judul, deskripsi, teks pilihan, baris/kolom kisi), judul, atau pembuat dengan sorotan hasil; filter status/jenis & urutan; detail isi lengkap (semua pertanyaan, pilihan, kunci jawaban, pengaturan, jumlah respons/sertifikat/kehadiran), unduh respons Excel, hapus satu atau banyak sekaligus (tercatat di log server). Admin tetap tidak masuk Mode Editor formulir orang lain.
 
 ### Fitur lanjutan
 - **Daftar peserta (whitelist)** per form: tempel / unggah .csv/.txt berisi email dan/atau NIM; status "sudah mengisi" & "hadir" terlihat. Opsi *wajib login E-Portal* untuk keamanan penuh.
@@ -23,10 +24,13 @@ Node.js 20+ · Express · PostgreSQL · SPA tanpa build.
 - **Absensi QR**: QR/tautan `/checkin/<token>` per form, token dapat diganti, catat manual, sheet *Kehadiran* di Excel; sertifikat opsional hanya untuk yang hadir.
 - **Percabangan**: "tampilkan pertanyaan bila jawaban sebelumnya …" (sama dengan, tidak sama, mengandung, lebih/kurang dari, sudah/belum dijawab; semua/salah satu syarat).
 - **Sertifikat**: 4 templat (klasik, modern, elegan, minimalis), **nomor resmi** (`{{no:3}}/UIKA/{{bulan}}/{{tahun}}`), **kirim massal** ke email dengan progres.
+- **Desain sertifikat visual** (tab Sertifikat › *Buka desain sertifikat*): pratinjau A4 yang elemennya bisa diklik & digeser (atau tombol panah), panel kanan berisi daftar elemen (logo sponsor kiri/kanan atas, logo & nama penyelenggara, judul, nomor, kalimat pengantar, nama peserta, teks isi, judul kegiatan, teks penutup, tempat & tanggal, tanda tangan, nama & jabatan penanda tangan, QR, kode verifikasi, logo “Didukung oleh”) dengan pengaturan tampil/sembunyi, ukuran huruf, lebar area, posisi X/Y, rata kiri/tengah/kanan, warna, jenis huruf, tebal/miring/kapital, spasi huruf. PDF memakai tata letak yang sama (`src/certLayout.js`).
 - **Email**: notifikasi ke pemilik saat ada respons baru (dirangkum ≥5 menit) dan konfirmasi ke peserta.
 - **Rekap**: laporan **PDF**, **analisis butir soal** (tingkat kesukaran, daya pembeda, reliabilitas KR-20), ringkasan kisi/peringkat, unduh berkas jawaban.
 - **Tautan pendek** `/s/<alias>`, **QR formulir** (PNG/SVG), kode **embed iframe** (`?embed=1`, harus diizinkan di Pengaturan).
-- **Mode gelap** (otomatis / terang / gelap) dan **bahasa Indonesia / English** (tombol di bilah atas, `?lang=en`, atau bahasa per form).
+- **Mode terang / gelap**: aplikasi bawaan terang; tombol matahari/bulan di bilah atas menyimpan pilihan pengguna. Tiap formulir punya *Mode tampilan* (Terang/Gelap) dan palet latar sendiri di tab Tampilan; peserta tetap bisa menggantinya.
+- **Nyaman di HP** (diuji di lebar 320–430 px, tanpa geser ke samping): bilah atas ringkas dengan tombol menu ⋯ (Mode Pengisian, Bagikan, bahasa, tema, keluar), tab Editor 5 kolom berikon, baris pengaturan otomatis turun ke bawah, tombol minimal ±40 px untuk jari, input 16 px (tanpa zoom otomatis iOS), pita timer/pelanggaran padat saat kuis, desainer sertifikat dengan pratinjau yang menempel di atas.
+- **Bahasa Indonesia / English**: tombol EN/ID di bilah atas, `?lang=en`, atau *Bahasa formulir* (tab Tampilan/Pengaturan).
 
 ## Menjalankan
 ```bash

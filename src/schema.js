@@ -9,7 +9,7 @@ const CHOICE_TYPES = ['radio', 'checkbox', 'dropdown', 'ranking'];
 const OPS = ['eq', 'neq', 'contains', 'gt', 'lt', 'answered', 'not_answered'];
 
 const DEFAULT_THEME = {
-  color: '#0071e3', bg: '#f2f2f7', header_style: 'gradient', header_image: null, font: 'system',
+  color: '#0071e3', bg: '#f2f2f7', header_style: 'gradient', header_image: null, font: 'system', mode: 'light',
 };
 const DEFAULT_SETTINGS = {
   is_quiz: false, duration_min: 0, identity: 'ask', one_response: false,
@@ -23,7 +23,8 @@ const DEFAULT_SETTINGS = {
 };
 const DEFAULT_CERT = {
   enabled: false, title: 'SERTIFIKAT', subtitle: 'Diberikan kepada',
-  body: 'telah berpartisipasi dalam kegiatan "{{judul}}"',
+  body: 'atas partisipasinya sebagai peserta dalam kegiatan',
+  event_text: '“{{judul}}”', footer: '', place: 'Bogor', sponsor_label: 'Didukung oleh', logo_image: null, layout: null,
   organizer: 'Universitas Ibn Khaldun Bogor', signer_name: '', signer_title: '',
   accent: '#0071e3', bg_color: '#ffffff', bg_image: null, signature_image: null,
   sponsors: { tl: null, tr: null, br: null }, min_percent: 60, auto_email: false,
@@ -52,6 +53,7 @@ function cleanTheme(t = {}) {
     header_style: oneOf(t.header_style, ['solid', 'gradient', 'image'], 'gradient'),
     header_image: uuidOrNull(t.header_image),
     font: oneOf(t.font, ['system', 'serif', 'rounded', 'mono'], 'system'),
+    mode: oneOf(t.mode, ['light', 'dark'], 'light'),
   };
 }
 
@@ -109,6 +111,12 @@ function cleanCert(c = {}, settings) {
     template: oneOf(c.template, ['classic', 'modern', 'elegant', 'minimal'], 'classic'),
     number_format: str(c.number_format, 120),
     number_start: intRange(c.number_start, 1, 999999, 1),
+    event_text: str(c.event_text, 200, DEFAULT_CERT.event_text),
+    footer: str(c.footer, 400, DEFAULT_CERT.footer),
+    place: str(c.place, 80, DEFAULT_CERT.place),
+    sponsor_label: str(c.sponsor_label, 60, DEFAULT_CERT.sponsor_label),
+    logo_image: uuidOrNull(c.logo_image),
+    layout: require('./certLayout').cleanLayout(c.layout),
   };
   return out;
 }

@@ -24,7 +24,7 @@ export function responsesTab(host, form, ctx) {
       h('button', { class: 'btn icon', title: 'Muat ulang', onclick: async () => { await loadSummary(); drawHead(); draw(); } }, icon('refresh')),
       h('a', { class: 'btn', href: `/api/forms/${form.id}/report.pdf` }, icon('file', 16), 'Laporan PDF'),
       h('a', { class: 'btn', href: `/api/forms/${form.id}/export.xlsx` }, icon('download', 16), 'Unduh Excel')),
-    h('div', { style: { display: 'flex', justifyContent: 'center', marginBottom: '14px' } }, h('div', { class: 'seg' }, t('summary', 'Ringkasan', 'chart'), t('question', 'Pertanyaan', 'list'), t('individual', 'Individual', 'user'))));
+    h('div', { style: { display: 'flex', justifyContent: 'center', marginBottom: '14px' } }, h('div', { class: 'seg seg-fill' }, t('summary', 'Ringkasan', 'chart'), t('question', 'Pertanyaan', 'list'), t('individual', 'Individual', 'user'))));
   }
 
   async function draw() {

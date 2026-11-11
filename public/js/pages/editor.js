@@ -1,9 +1,10 @@
 /* MODE EDITOR — hanya untuk pembuat formulir dan email yang ia daftarkan (dijaga di server). */
-import { h, clear, icon, api, ApiError, session, navbar, userMenu, link, navigate, toast, modal, confirmDialog, debounce, uuid, applyTheme, heroClass, heroStyle,
-  loginUrl, copyText, fillUrl, errMsg, fmtDateTime, num, logo } from '../core.js';
+import { h, clear, icon, api, ApiError, session, navbar, userMenu, link, navigate, toast, modal, confirmDialog, debounce, uuid, applyTheme, heroClass, heroStyle, luminance,
+  loginUrl, copyText, fillUrl, errMsg, fmtDateTime, num, logo, prefButtons } from '../core.js';
 import { responsesTab } from './results.js';
 import { editListDialog } from './lists.js';
 import * as P from './editor-parts.js';
+import { openCertDesigner } from './cert-designer.js';
 
 const TYPES = [
   ['short', 'Jawaban singkat'], ['paragraph', 'Paragraf / esai'], ['radio', 'Pilihan ganda'], ['checkbox', 'Kotak centang'],
@@ -15,7 +16,12 @@ const WITH_OPTIONS = ['radio', 'checkbox', 'dropdown', 'ranking'];
 const GRADABLE = ['radio', 'checkbox', 'dropdown', 'short', 'scale', 'paragraph', 'file'];
 const MANUAL = ['paragraph', 'file'];
 const ACCENTS = ['#0071e3', '#34c759', '#ff9500', '#ff3b30', '#af52de', '#5ac8fa', '#ff2d55', '#5856d6', '#00a699', '#1d1d1f'];
-const BGS = ['#f2f2f7', '#e8f1ff', '#e9f8ee', '#fff4e5', '#fdeceb', '#f3e8ff', '#e5f7fb', '#fdeaf1', '#f5f0e6', '#e5e5ea'];
+const BGS = {
+  light: ['#f2f2f7', '#ffffff', '#dbeafe', '#dcfce7', '#fef3c7', '#fee2e2', '#ede9fe', '#cffafe', '#fce7f3', '#f5ecd7', '#e2e8f0'],
+  dark: ['#000000', '#1c1c1e', '#0f172a', '#0b2a4a', '#0f2e1d', '#3a2a0c', '#3b1214', '#241640', '#083344', '#3a1230', '#2b2620'],
+};
+const BG_NAMES = { '#f2f2f7': 'Abu muda', '#ffffff': 'Putih', '#dbeafe': 'Biru muda', '#dcfce7': 'Hijau muda', '#fef3c7': 'Kuning muda', '#fee2e2': 'Merah muda', '#ede9fe': 'Ungu muda', '#cffafe': 'Toska muda', '#fce7f3': 'Merah jambu', '#f5ecd7': 'Krem', '#e2e8f0': 'Abu kebiruan',
+  '#000000': 'Hitam', '#1c1c1e': 'Arang', '#0f172a': 'Biru malam', '#0b2a4a': 'Biru laut', '#0f2e1d': 'Hijau tua', '#3a2a0c': 'Cokelat', '#3b1214': 'Merah marun', '#241640': 'Ungu tua', '#083344': 'Toska tua', '#3a1230': 'Plum', '#2b2620': 'Kopi' };
 
 export async function editorPage(root, { id }, query) {
   if (!session.user) {
@@ -29,17 +35,25 @@ export async function editorPage(root, { id }, query) {
   let destroyTab = null;
 
   /* ---------- simpan otomatis ---------- */
-  const stateEl = h('span', { class: 'savestate' }, h('i', { class: 'dot' }), 'Tersimpan');
-  const setState = (k, msg) => { clear(stateEl); stateEl.append(h('i', { class: `dot ${k === 'busy' || k === 'dirty' ? 'busy' : k === 'err' ? 'err' : ''}` }), k === 'busy' ? 'Menyimpan…' : k === 'dirty' ? 'Belum tersimpan' : k === 'err' ? (msg || 'Gagal menyimpan') : 'Tersimpan'); };
+  const stateEl = h('span', { class: 'savestate' }, h('i', { class: 'dot' }), h('span', { class: 'lbl' }, 'Tersimpan'));
+  const setState = (k, msg) => { clear(stateEl); stateEl.append(h('i', { class: `dot ${k === 'busy' || k === 'dirty' ? 'busy' : k === 'err' ? 'err' : ''}` }), h('span', { class: 'lbl' }, k === 'busy' ? 'Menyimpan…' : k === 'dirty' ? 'Belum tersimpan' : k === 'err' ? (msg || 'Gagal menyimpan') : 'Tersimpan')); };
   let chain = Promise.resolve();
+  const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
+  /** Salin nilai server ke objek lokal tanpa mengganti objek bersarang (referensi panel tetap valid). */
+  const mergeInto = (t, src) => { for (const [k, v] of Object.entries(src || {})) { if (isObj(v) && isObj(t[k])) mergeInto(t[k], v); else t[k] = v; } };
+  let rev = 0;
   async function doSave(force) {
     setState('busy');
+    const revAtStart = rev;
     try {
       const r = await api('PUT', `/api/forms/${form.id}`, {
         title: form.title, description: form.description, status: form.status, theme: form.theme, settings: form.settings, cert: form.cert,
         questions: form.questions, base_updated_at: base, force: force || undefined,
       });
-      base = r.updated_at; form.settings = r.settings; form.cert = r.cert; form.slug = r.slug;
+      base = r.updated_at; form.slug = r.slug;
+      // Ambil hasil normalisasi server hanya bila tidak ada perubahan lokal baru selama menyimpan.
+      // Objek dipertahankan (Object.assign) agar panel yang masih terbuka tetap merujuk objek yang sama.
+      if (rev === revAtStart) { mergeInto(form.settings, r.settings); mergeInto(form.cert, r.cert); }
       setState('ok');
     } catch (e) {
       if (e.status === 409 && e.data.error === 'conflict') { setState('err', 'Konflik'); conflict(e.data.form); return; }
@@ -50,7 +64,7 @@ export async function editorPage(root, { id }, query) {
   }
   const save = (force) => { chain = chain.then(() => doSave(force)); return chain; };
   const scheduleSave = debounce(() => save(), 700);
-  const touch = () => { setState('dirty'); scheduleSave(); };
+  const touch = () => { rev += 1; setState('dirty'); scheduleSave(); };
   const flush = () => { scheduleSave.cancel(); return save(); };
 
   function conflict(latest) {
@@ -71,7 +85,7 @@ export async function editorPage(root, { id }, query) {
   clear(root); root.append(shell);
   const prevBg = document.body.style.background;
 
-  const refreshTheme = () => { applyTheme(shell, form.theme); document.body.style.background = form.theme.bg; };
+  const refreshTheme = () => { applyTheme(shell, form.theme, { follow: false }); document.body.style.background = form.theme.bg; };
   const statusPill = () => ({ draft: h('span', { class: 'pill' }, 'Draf'), published: h('span', { class: 'pill ok' }, 'Dibuka'), closed: h('span', { class: 'pill bad' }, 'Ditutup') }[form.status]);
 
   function renderTop() {
@@ -83,11 +97,29 @@ export async function editorPage(root, { id }, query) {
     const publishBtn = form.status === 'published'
       ? h('button', { class: 'btn sm', onclick: async () => { form.status = 'closed'; renderTop(); touch(); toast('Formulir ditutup'); } }, 'Tutup')
       : h('button', { class: 'btn sm primary', onclick: async () => { form.status = 'published'; renderTop(); await flush(); if (form.status === 'published') shareModal(true); } }, 'Terbitkan');
+    mode.classList.add('hide-sm');
+    const pill = statusPill(); pill.classList.add('hide-sm');
+    const more = h('button', { class: 'btn icon show-sm', title: 'Menu lainnya', 'aria-label': 'Menu lainnya', onclick: mobileMenu }, icon('more'));
+    const logout = userMenu({ compact: true }); logout.classList.add('hide-sm');
     topEl.append(navbar({
-      left: h('div', { class: 'row', style: { minWidth: 0, flex: '0 1 320px' } }, link('/', { class: 'btn icon ghost', title: 'Ke daftar formulir' }, icon('back')), titleIn),
-      center: mode,
-      right: [stateEl, statusPill(), h('button', { class: 'btn sm hide-sm', onclick: () => shareModal(false) }, icon('share', 16), 'Bagikan'), publishBtn, userMenu()],
+      left: h('div', { class: 'row nav-left', style: { minWidth: 0, flex: '1 1 320px' } }, link('/', { class: 'btn icon ghost', title: 'Ke daftar formulir' }, icon('back')), titleIn),
+      center: mode, prefsInMenu: true,
+      right: [stateEl, pill, h('button', { class: 'btn sm hide-sm', onclick: () => shareModal(false) }, icon('share', 16), 'Bagikan'), publishBtn, logout, more],
     }));
+  }
+
+  /** Menu ringkas untuk HP: pratinjau, bagikan, bahasa, tema, keluar. */
+  function mobileMenu() {
+    const item = (ic, label, fn, extra) => h('button', { class: 'menu-item', type: 'button', onclick: () => { m.close(); fn(); } }, icon(ic, 20), h('span', { class: 'grow' }, label), extra || null);
+    const m = modal({
+      title: 'Menu',
+      body: h('div', { class: 'menu-list' },
+        h('div', { class: 'row', style: { gap: '8px', marginBottom: '6px' } }, statusPill(), h('span', { class: 'small muted' }, stateEl.textContent)),
+        item('eye', 'Lihat seperti peserta (Mode Pengisian)', async () => { await flush(); navigate(`/f/${form.slug}?preview=1`); }),
+        item('share', 'Bagikan (tautan, QR, sematkan)', () => shareModal(false)),
+        h('div', { class: 'menu-item static' }, icon('half', 20), h('span', { class: 'grow' }, 'Bahasa & tema'), prefButtons()),
+        item('logout', 'Keluar', async () => { await api('POST', '/auth/logout'); session.user = null; location.href = '/'; })),
+    });
   }
 
   function renderTabs() {
@@ -110,8 +142,11 @@ export async function editorPage(root, { id }, query) {
   const toggle = (checked, onChange) => h('label', { class: 'switch' }, h('input', { type: 'checkbox', checked, onchange: (e) => onChange(e.target.checked) }), h('i'));
   const setting = (title, desc, control) => h('div', { class: 'setting' }, h('div', { class: 't' }, h('b', null, title), desc && h('span', null, desc)), control);
   const sel = (value, opts, onChange, props) => h('select', { class: 'in', style: { width: 'auto', ...(props || {}) }, value, onchange: (e) => onChange(e.target.value) }, opts.map(([v, l]) => h('option', { value: v }, l)));
-  const colorRow = (current, presets, onPick) => h('div', { class: 'swatches' }, presets.map((c) => h('button', { class: `sw ${current.toLowerCase() === c ? 'on' : ''}`, style: { background: c }, title: c, onclick: () => onPick(c) })),
-    h('input', { type: 'color', value: current, title: 'Warna kustom', oninput: (e) => onPick(e.target.value, true) }));
+  const colorRow = (current, presets, onPick, names = {}) => h('div', { class: 'swatches' }, presets.map((c) => {
+    const on = current.toLowerCase() === c;
+    return h('button', { class: `sw ${on ? 'on' : ''}`, type: 'button', style: { background: c, color: luminance(c) > 0.55 ? '#1d1d1f' : '#ffffff' }, title: names[c] || c, 'aria-label': names[c] || c, 'aria-pressed': on ? 'true' : 'false', onclick: () => onPick(c) }, on ? icon('check', 16) : null);
+  }),
+  h('input', { type: 'color', value: current, title: 'Warna kustom', 'aria-label': 'Warna kustom', oninput: (e) => onPick(e.target.value, true) }));
   const toLocalInput = (iso) => { if (!iso) return ''; const d = new Date(iso); const p = (n) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; };
   const fromLocalInput = (v) => (v ? new Date(v).toISOString() : null);
 
@@ -286,7 +321,7 @@ export async function editorPage(root, { id }, query) {
     if (q.type === 'dropdown') body.append(listSource(q, rerender));
     if (linked) {
       body.append(h('div', { class: 'small muted' }, `${q.options.length} pilihan dari daftar tersimpan — isinya selalu mengikuti daftar. Contoh:`),
-        h('div', { style: { marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' } }, q.options.slice(0, 8).map((o) => h('span', { style: { background: '#f2f2f7', borderRadius: '999px', padding: '4px 12px', fontSize: '13px' } }, o.text)), q.options.length > 8 && h('span', { style: { padding: '4px 6px', fontSize: '13px', color: '#6e6e73' } }, `+${q.options.length - 8} lagi`)));
+        h('div', { style: { marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' } }, q.options.slice(0, 8).map((o) => h('span', { class: 'lchip' }, o.text)), q.options.length > 8 && h('span', { style: { padding: '4px 6px', fontSize: '13px', color: '#6e6e73' } }, `+${q.options.length - 8} lagi`)));
     } else if (WITH_OPTIONS.includes(q.type)) {
       if (q.type === 'ranking') body.append(h('div', { class: 'small muted', style: { marginBottom: '6px' } }, 'Peserta mengurutkan semua opsi dari yang paling penting/diprioritaskan. Peringkat tidak dinilai otomatis.'));
       q.options.forEach((o, i) => {
@@ -379,7 +414,15 @@ export async function editorPage(root, { id }, query) {
       clear(ctl);
       ctl.append(
         h('h3', null, 'Warna tema'), h('p', { class: 'small muted' }, 'Dipakai untuk header, tombol, dan pilihan.'), colorRow(T.color, ACCENTS, (c) => { T.color = c; paintHero(); touch(); if (!c.startsWith('#') || ACCENTS.includes(c)) draw(); }),
-        h('div', { style: { height: '18px' } }), h('h3', null, 'Warna latar halaman'), colorRow(T.bg, BGS, (c) => { T.bg = c; paintHero(); touch(); if (BGS.includes(c)) draw(); }),
+        h('div', { style: { height: '18px' } }), h('h3', null, 'Mode tampilan'), h('p', { class: 'small muted' }, 'Mode bawaan yang dilihat peserta. Peserta tetap bisa menggantinya dengan tombol matahari/bulan.'),
+        h('div', { class: 'seg', style: { marginTop: '4px' } }, [['light', 'Terang'], ['dark', 'Gelap']].map(([v, l]) => h('button', { class: (T.mode || 'light') === v ? 'on' : '', onclick: () => {
+          if ((T.mode || 'light') === v) return;
+          T.mode = v; if (!BGS[v].includes(T.bg)) T.bg = BGS[v][0]; refreshTheme(); paintHero(); touch(); draw();
+        } }, icon(v === 'light' ? 'sun' : 'moon', 16), l))),
+        h('div', { style: { height: '18px' } }), h('h3', null, 'Warna latar halaman'), h('p', { class: 'small muted' }, (T.mode || 'light') === 'dark' ? 'Pilihan latar gelap.' : 'Pilihan latar terang.'),
+        colorRow(T.bg, BGS[T.mode || 'light'], (c, custom) => { T.bg = c; refreshTheme(); paintHero(); touch(); if (!custom) draw(); }, BG_NAMES),
+        h('div', { style: { height: '18px' } }), h('h3', null, 'Bahasa formulir'), h('p', { class: 'small muted' }, 'Bahasa antarmuka yang dilihat peserta (isi pertanyaan tetap seperti yang Anda tulis).'),
+        h('div', { class: 'seg', style: { marginTop: '4px' } }, [['id', 'Bahasa Indonesia'], ['en', 'English']].map(([v, l]) => h('button', { class: form.settings.language === v ? 'on' : '', translate: 'no', onclick: () => { form.settings.language = v; touch(); draw(); } }, l))),
         h('div', { style: { height: '18px' } }), h('h3', null, 'Gaya header'),
         h('div', { class: 'seg', style: { marginTop: '8px' } }, [['solid', 'Warna'], ['gradient', 'Gradasi'], ['image', 'Gambar']].map(([v, l]) => h('button', { class: T.header_style === v ? 'on' : '', onclick: () => { T.header_style = v; paintHero(); touch(); draw(); } }, l))),
         T.header_style === 'image' && h('div', { style: { marginTop: '12px' } }, imageSlot('Gambar header', 'PNG/JPG, disarankan 1600×500', T.header_image, (nid) => { T.header_image = nid; paintHero(); touch(); })),
@@ -492,22 +535,28 @@ export async function editorPage(root, { id }, query) {
         touch(); draw();
       }))));
       if (!C.enabled) return;
+      wrap.append(h('div', { class: 'card cd-cta' }, h('div', { class: 'row wrap' }, h('div', { class: 'ico' }, icon('award', 24)),
+        h('div', { class: 'grow' }, h('h3', { style: { margin: 0 } }, 'Desain sertifikat'), h('div', { class: 'small muted' }, 'Atur posisi, ukuran huruf, lebar area, dan perataan setiap elemen secara visual — klik lalu geser langsung di pratinjau.')),
+        h('button', { class: 'btn primary', onclick: () => openCertDesigner(ctx, { onClose: draw }) }, icon('edit', 16), 'Buka desain sertifikat'))));
       const f = (label, key, props = {}) => h('div', null, h('label', { class: 'f' }, label), h('input', { class: 'in', value: C[key] || '', maxlength: 150, oninput: (e) => { C[key] = e.target.value; touch(); }, ...props }));
       wrap.append(h('div', { class: 'card' }, h('h3', { style: { marginBottom: '12px' } }, 'Isi sertifikat'),
         h('div', { class: 'col' }, f('Judul', 'title'), f('Kalimat pengantar', 'subtitle'),
           h('div', null, h('label', { class: 'f' }, 'Teks isi'), h('textarea', { class: 'in', rows: 3, maxlength: 600, value: C.body, oninput: (e) => { C.body = e.target.value; touch(); } }),
-            h('div', { class: 'row wrap', style: { marginTop: '6px' } }, h('span', { class: 'tiny muted' }, 'Sisipkan:'), ['{{nama}}', '{{judul}}', '{{tanggal}}', '{{nilai}}'].map((t) => h('button', { class: 'chipbtn', onclick: () => { C.body = `${C.body} ${t}`.trim(); touch(); draw(); } }, t)))),
-          f('Penyelenggara', 'organizer'),
+            h('div', { class: 'row wrap', style: { marginTop: '6px' } }, h('span', { class: 'tiny muted' }, 'Sisipkan:'), ['{{nama}}', '{{judul}}', '{{tanggal}}', '{{nilai}}', '{{nomor}}'].map((t) => h('button', { class: 'chipbtn', onclick: () => { C.body = `${C.body} ${t}`.trim(); touch(); draw(); } }, t)))),
+          f('Judul kegiatan (baris tersendiri)', 'event_text', { placeholder: '“{{judul}}”', maxlength: 200 }),
+          h('div', null, h('label', { class: 'f' }, 'Teks penutup (opsional)'), h('textarea', { class: 'in', rows: 2, maxlength: 400, value: C.footer || '', placeholder: 'mis. yang diselenggarakan secara daring pada {{tanggal}}.', oninput: (e) => { C.footer = e.target.value; touch(); } })),
+          h('div', { class: 'row' }, h('div', { class: 'grow' }, f('Penyelenggara', 'organizer')), h('div', { style: { width: '180px' } }, f('Tempat (untuk tanggal)', 'place', { maxlength: 80 }))),
           h('div', { class: 'row' }, h('div', { class: 'grow' }, f('Nama penandatangan', 'signer_name')), h('div', { class: 'grow' }, f('Jabatan', 'signer_title'))))));
       wrap.append(h('div', { class: 'card' }, h('h3', { style: { marginBottom: '8px' } }, 'Latar & warna'),
         h('label', { class: 'f' }, 'Warna aksen (garis & judul)'), colorRow(C.accent, ACCENTS, (c) => { C.accent = c; touch(); }),
         h('div', { style: { height: '14px' } }), h('label', { class: 'f' }, 'Warna latar'), colorRow(C.bg_color, ['#ffffff', '#fffaf0', '#f2f7ff', '#f4fff6', '#fff5f5', '#f7f7f7'], (c) => { C.bg_color = c; touch(); }),
         h('div', { style: { height: '14px' } }), imageSlot('Gambar latar sertifikat', 'A4 landscape (PNG/JPG) — menggantikan bingkai bawaan', C.bg_image, (nid) => { C.bg_image = nid; touch(); })));
       wrap.append(P.certTemplateCard(ctx, draw));
-      wrap.append(h('div', { class: 'card' }, h('h3', null, 'Sponsor / logo'), h('p', { class: 'small muted' }, 'Tempatkan logo di kiri atas, kanan atas, atau kanan bawah. QR verifikasi selalu di kiri bawah.'),
-        h('div', { class: 'col' }, imageSlot('Kiri atas', 'Logo sponsor 1', C.sponsors.tl, (nid) => { C.sponsors.tl = nid; touch(); }),
+      wrap.append(h('div', { class: 'card' }, h('h3', null, 'Logo & tanda tangan'), h('p', { class: 'small muted' }, 'Posisi dan ukuran setiap logo, tanda tangan, dan QR verifikasi diatur di Desain sertifikat.'),
+        h('div', { class: 'col' }, imageSlot('Logo penyelenggara', 'Tampil di atas nama penyelenggara', C.logo_image, (nid) => { C.logo_image = nid; touch(); }),
+          imageSlot('Kiri atas', 'Logo sponsor 1', C.sponsors.tl, (nid) => { C.sponsors.tl = nid; touch(); }),
           imageSlot('Kanan atas', 'Logo sponsor 2', C.sponsors.tr, (nid) => { C.sponsors.tr = nid; touch(); }),
-          imageSlot('Kanan bawah', 'Logo sponsor 3', C.sponsors.br, (nid) => { C.sponsors.br = nid; touch(); }),
+          imageSlot('Kanan bawah — “Didukung oleh”', 'Logo sponsor 3', C.sponsors.br, (nid) => { C.sponsors.br = nid; touch(); }),
           imageSlot('Tanda tangan (opsional)', 'PNG transparan lebih baik', C.signature_image, (nid) => { C.signature_image = nid; touch(); }))));
       wrap.append(h('div', { class: 'card' }, h('h3', null, 'Syarat & pengiriman'),
         S.is_quiz && setting('Nilai minimal untuk sertifikat', 'Dalam persen dari total poin', h('div', { class: 'row' }, h('input', { class: 'in', type: 'number', min: 0, max: 100, value: C.min_percent, style: { width: '90px' }, oninput: (e) => { C.min_percent = Math.max(0, Math.min(100, Number(e.target.value) || 0)); touch(); } }), '%')),

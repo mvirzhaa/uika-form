@@ -5,91 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#00602f">
   <title>Portal Layanan &amp; Utilitas Digital — Universitas Ibn Khaldun Bogor</title>
-  <meta name="description" content="Pusat layanan digital dan utilitas akademik terpadu Universitas Ibn Khaldun Bogor (UIKA): UIKA Form, OlahPDF, Presensi, Detektor Teks AI, dan Perancang Denah 2D/3D.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2300602f'/%3E%3Cpath d='M32 10L14 20v18c0 11 7.7 21.3 18 24 10.3-2.7 18-13 18-24V20L32 10z' fill='%2300733c' stroke='%23f59e0b' stroke-width='2'/%3E%3Cpath d='M22 34c0-5 4.5-9 10-9s10 4 10 9' stroke='%23ffffff' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='22' r='3.5' fill='%23fbbf24'/%3E%3C/svg%3E">
+  <meta name="description" content="Pusat layanan digital dan utilitas akademik resmi Universitas Ibn Khaldun Bogor (UIKA): UIKA Form, OlahPDF, Presensi, Detektor Teks AI, dan Perancang Denah 2D/3D.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2300602f'/%3E%3Cpath d='M32 8L12 18v18c0 12 8.5 23 20 26 11.5-3 20-14 20-26V18L32 8z' fill='%2300733c' stroke='%23fbbf24' stroke-width='2.5'/%3E%3Cpath d='M22 34c0-5 4.5-9 10-9s10 4 10 9' stroke='%23ffffff' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='22' r='3.5' fill='%23fbbf24'/%3E%3C/svg%3E">
+
+  <!-- Official Google Fonts: Plus Jakarta Sans (Modern Institutional Academic Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     /* =========================================================
-       DESIGN TOKENS — UNIVERSITAS IBN KHALDUN BOGOR BRAND
+       UNIVERSITAS IBN KHALDUN BOGOR — OFFICIAL LIGHT THEME
        ========================================================= */
     :root {
       /* UIKA Green Identity */
-      --uika-dark: #004d25;
-      --uika-primary: #00602f;
-      --uika-light: #007d3f;
+      --uika-dark: #004622;
+      --uika-primary: #006837;
+      --uika-light: #008744;
       --uika-emerald: #059669;
-      --uika-subtle: #ebf7f0;
-      --uika-border: #bce3cb;
+      --uika-subtle: #f0fdf4;
+      --uika-border: #bbf7d0;
       
       /* UIKA Gold / Amber Accent */
       --gold-dark: #b45309;
       --gold-primary: #d97706;
       --gold-light: #f59e0b;
-      --gold-subtle: #fef3c7;
+      --gold-subtle: #fffbeb;
+      --gold-border: #fde68a;
       
-      /* Neutral Canvas (Light Mode) */
+      /* Clean Light Canvas (Terang, Elegan, Standar Kampus) */
       --bg: #f8fafc;
+      --bg-white: #ffffff;
       --bg-card: #ffffff;
       --bg-card-hover: #ffffff;
       --bg-subtle: #f1f5f9;
+      
       --border: #e2e8f0;
       --border-strong: #cbd5e1;
       
+      /* High-Contrast Professional Academic Typography */
       --text: #0f172a;
-      --text-muted: #475569;
-      --text-subtle: #64748b;
-      --text-inverse: #ffffff;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
       
-      --header-bg: rgba(255, 255, 255, 0.94);
-      --header-border: rgba(226, 232, 240, 0.9);
+      --header-bg: rgba(255, 255, 255, 0.98);
+      --header-border: #e2e8f0;
       
-      --shadow-sm: 0 1px 3px rgba(0, 77, 37, 0.04), 0 1px 2px rgba(0,0,0,0.02);
-      --shadow-md: 0 4px 8px -2px rgba(0, 77, 37, 0.06), 0 2px 4px -2px rgba(0,0,0,0.03);
-      --shadow-lg: 0 14px 28px -6px rgba(0, 77, 37, 0.09), 0 6px 12px -4px rgba(0,0,0,0.04);
-      --shadow-glow: 0 0 32px rgba(0, 96, 47, 0.12);
+      /* Subtle Modern Shadows */
+      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+      --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+      --shadow-lg: 0 16px 32px -4px rgba(0, 104, 55, 0.08), 0 6px 16px -2px rgba(15, 23, 42, 0.04);
+      --shadow-glow: 0 0 28px rgba(0, 104, 55, 0.12);
       
       --radius-sm: 8px;
       --radius-md: 14px;
-      --radius-lg: 20px;
-      --radius-xl: 28px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
       --radius-pill: 9999px;
 
-      --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
 
+    /* Optional Clean Dark Mode */
     [data-theme="dark"] {
-      --uika-dark: #002e16;
-      --uika-primary: #10b981;
-      --uika-light: #34d399;
-      --uika-emerald: #10b981;
-      --uika-subtle: rgba(16, 185, 129, 0.12);
-      --uika-border: rgba(16, 185, 129, 0.25);
-      
-      --gold-dark: #78350f;
-      --gold-primary: #f59e0b;
-      --gold-light: #fbbf24;
-      --gold-subtle: rgba(245, 158, 11, 0.12);
-      
-      /* Neutral Canvas (Dark Mode) */
-      --bg: #090e17;
-      --bg-card: #111928;
-      --bg-card-hover: #162237;
-      --bg-subtle: #1a273f;
-      --border: #1e293b;
-      --border-strong: #334155;
-      
+      --bg: #0f172a;
+      --bg-white: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-hover: #243248;
+      --bg-subtle: #162032;
+      --border: #334155;
+      --border-strong: #475569;
       --text: #f8fafc;
+      --text-body: #cbd5e1;
       --text-muted: #94a3b8;
       --text-subtle: #64748b;
-      --text-inverse: #090e17;
-      
-      --header-bg: rgba(17, 25, 40, 0.92);
-      --header-border: rgba(30, 41, 59, 0.9);
-      
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-      --shadow-md: 0 4px 10px rgba(0,0,0,0.45);
-      --shadow-lg: 0 16px 36px rgba(0,0,0,0.6);
-      --shadow-glow: 0 0 32px rgba(16, 185, 129, 0.18);
+      --header-bg: rgba(30, 41, 59, 0.95);
+      --header-border: #334155;
+      --uika-subtle: rgba(16, 185, 129, 0.14);
+      --uika-border: rgba(16, 185, 129, 0.3);
+      --uika-primary: #10b981;
+      --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 28px rgba(16, 185, 129, 0.2);
     }
 
     /* =========================================================
@@ -106,34 +104,30 @@
     }
 
     body {
-      font-family: var(--font-sans);
+      font-family: var(--font-main);
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-body);
       line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.25s ease, color 0.25s ease;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Subtle background academic grid pattern */
+    /* Subtle decorative top glow */
     body::before {
       content: '';
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 480px;
-      background: radial-gradient(circle at 50% -80px, rgba(0, 96, 47, 0.12) 0%, transparent 70%);
+      height: 420px;
+      background: linear-gradient(180deg, rgba(0, 104, 55, 0.05) 0%, transparent 100%);
       pointer-events: none;
       z-index: 0;
-    }
-
-    [data-theme="dark"] body::before {
-      background: radial-gradient(circle at 50% -80px, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
     }
 
     a {
@@ -142,13 +136,13 @@
     }
 
     /* =========================================================
-       TOP INSTITUTIONAL BAR
+       TOP ACADEMIC INSTITUTION BAR
        ========================================================= */
     .topbar {
-      background: linear-gradient(90deg, #004d25 0%, #00602f 50%, #004d25 100%);
+      background: linear-gradient(90deg, #004d25 0%, #006837 50%, #004d25 100%);
       color: #ffffff;
-      font-size: 0.78rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.8rem;
+      border-bottom: 2px solid #f59e0b;
       position: relative;
       z-index: 101;
     }
@@ -156,7 +150,7 @@
     .topbar-inner {
       max-width: 1260px;
       margin: 0 auto;
-      padding: 7px 24px;
+      padding: 8px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -166,8 +160,8 @@
     .topbar-left {
       display: flex;
       align-items: center;
-      gap: 16px;
-      letter-spacing: 0.02em;
+      gap: 14px;
+      font-weight: 500;
     }
 
     .motto-pill {
@@ -177,7 +171,7 @@
       background: rgba(255, 255, 255, 0.15);
       padding: 2px 10px;
       border-radius: var(--radius-pill);
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 600;
       color: #fef3c7;
     }
@@ -185,71 +179,72 @@
     .topbar-right {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 20px;
+      font-size: 0.8rem;
     }
 
     .topbar-right a {
-      color: #e2e8f0;
+      color: #f1f5f9;
+      font-weight: 500;
       transition: color 0.2s ease;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     .topbar-right a:hover {
-      color: #fbbf24;
+      color: #fde68a;
     }
 
-    .system-status {
+    .server-status {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.74rem;
-      font-weight: 600;
+      gap: 7px;
       color: #d1fae5;
+      font-weight: 600;
+      font-size: 0.76rem;
     }
 
-    .status-ping {
-      width: 7px;
-      height: 7px;
+    .status-dot-pulse {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #10b981;
-      box-shadow: 0 0 6px #10b981;
-      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse-dot 2s infinite ease-in-out;
     }
 
-    @keyframes ping {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.3); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.8; }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     /* =========================================================
-       MAIN HEADER
+       MAIN HEADER (CLEAN WHITE & EMERALD)
        ========================================================= */
     .header {
       position: sticky;
       top: 0;
       z-index: 100;
       background: var(--header-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--header-border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s ease;
     }
 
     .header-inner {
       max-width: 1260px;
       margin: 0 auto;
-      padding: 12px 24px;
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
     }
 
-    /* University Brand Block */
+    /* UIKA Logo & Typography */
     .brand {
       display: flex;
       align-items: center;
@@ -264,29 +259,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 3px 6px rgba(0, 77, 37, 0.2));
+      filter: drop-shadow(0 2px 6px rgba(0, 104, 55, 0.18));
     }
 
-    .brand-title {
+    .brand-info {
       display: flex;
       flex-direction: column;
     }
 
-    .univ-name {
-      font-size: 0.82rem;
+    .univ-title {
+      font-size: 0.8rem;
       font-weight: 800;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
       color: var(--uika-primary);
       line-height: 1.2;
     }
 
-    [data-theme="dark"] .univ-name {
-      color: #34d399;
-    }
-
-    .portal-name {
-      font-size: 1.3rem;
+    .portal-title {
+      font-size: 1.35rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--text);
@@ -296,87 +287,82 @@
       gap: 8px;
     }
 
-    .portal-badge {
-      font-size: 0.65rem;
-      font-weight: 700;
+    .badge-hub {
+      font-size: 0.68rem;
+      font-weight: 800;
       padding: 2px 8px;
       border-radius: var(--radius-pill);
-      background: var(--gold-subtle);
-      color: var(--gold-dark);
-      border: 1px solid rgba(217, 119, 6, 0.25);
+      background: var(--uika-subtle);
+      color: var(--uika-primary);
+      border: 1px solid var(--uika-border);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    [data-theme="dark"] .portal-badge {
-      background: rgba(245, 158, 11, 0.15);
-      color: #fbbf24;
-    }
-
-    /* Header Action Controls */
+    /* Actions: E-Portal & Theme */
     .header-actions {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .btn-eportal {
+    .btn-portal-main {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 18px;
+      padding: 10px 20px;
       border-radius: var(--radius-pill);
-      background: linear-gradient(135deg, var(--uika-primary) 0%, var(--uika-dark) 100%);
+      background: var(--uika-primary);
       color: #ffffff;
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 0.9rem;
+      font-weight: 700;
       letter-spacing: 0.01em;
-      box-shadow: 0 3px 10px rgba(0, 96, 47, 0.25);
+      box-shadow: 0 3px 10px rgba(0, 104, 55, 0.25);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid transparent;
     }
 
-    .btn-eportal:hover {
-      background: linear-gradient(135deg, var(--uika-light) 0%, var(--uika-primary) 100%);
+    .btn-portal-main:hover {
+      background: var(--uika-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 96, 47, 0.35);
+      box-shadow: 0 6px 16px rgba(0, 104, 55, 0.35);
       color: #ffffff;
     }
 
-    .btn-theme {
+    .btn-theme-toggle {
       width: 42px;
       height: 42px;
       border-radius: var(--radius-pill);
       border: 1px solid var(--border);
-      background: var(--bg-card);
+      background: var(--bg-white);
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-xs);
     }
 
-    .btn-theme:hover {
+    .btn-theme-toggle:hover {
       background: var(--bg-subtle);
       border-color: var(--border-strong);
       transform: scale(1.05);
     }
 
     /* =========================================================
-       HERO ACADEMIC SECTION
+       HERO ACADEMIC SECTION (CLEAN & PRESTIGIOUS)
        ========================================================= */
     .hero {
       position: relative;
-      padding: 54px 24px 32px;
+      padding: 56px 24px 36px;
       text-align: center;
       max-width: 960px;
       margin: 0 auto;
       z-index: 1;
     }
 
-    .hero-pretitle {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -388,101 +374,87 @@
       font-size: 0.84rem;
       font-weight: 700;
       letter-spacing: 0.02em;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
-    [data-theme="dark"] .hero-pretitle {
-      background: rgba(16, 185, 129, 0.1);
-      border-color: rgba(16, 185, 129, 0.25);
-      color: #34d399;
-    }
-
-    .hero-pretitle svg {
+    .hero-badge svg {
       color: var(--gold-primary);
     }
 
-    .hero-title {
-      font-size: clamp(2.1rem, 4.2vw, 3.2rem);
+    .hero-heading {
+      font-size: clamp(2.2rem, 4.4vw, 3.3rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.18;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       color: var(--text);
     }
 
-    .hero-title .gradient-text {
-      background: linear-gradient(135deg, #00602f 0%, #059669 50%, #0284c7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .hero-heading .brand-highlight {
+      color: var(--uika-primary);
+      display: inline-block;
+      position: relative;
     }
 
-    [data-theme="dark"] .hero-title .gradient-text {
-      background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
+    .hero-desc {
       font-size: clamp(1rem, 1.8vw, 1.15rem);
       color: var(--text-muted);
       line-height: 1.65;
       max-width: 760px;
       margin: 0 auto 34px;
+      font-weight: 400;
     }
 
-    /* Search & Filter Controls */
-    .search-wrapper {
+    /* Search & Filter Bar */
+    .search-container {
       max-width: 680px;
-      margin: 0 auto;
+      margin: 0 auto 16px;
     }
 
-    .search-box {
+    .search-card {
       position: relative;
       display: flex;
       align-items: center;
-      background: var(--bg-card);
+      background: var(--bg-white);
       border: 2px solid var(--border);
       border-radius: var(--radius-pill);
-      padding: 6px 12px 6px 20px;
-      box-shadow: var(--shadow-md);
+      padding: 6px 12px 6px 22px;
+      box-shadow: 0 6px 20px -2px rgba(15, 23, 42, 0.06);
       transition: all 0.25s ease;
     }
 
-    .search-box:focus-within {
+    .search-card:focus-within {
       border-color: var(--uika-primary);
-      box-shadow: 0 0 0 5px var(--uika-subtle), var(--shadow-md);
+      box-shadow: 0 0 0 5px var(--uika-subtle), 0 8px 24px -2px rgba(0, 104, 55, 0.12);
     }
 
-    [data-theme="dark"] .search-box:focus-within {
-      border-color: var(--uika-primary);
-      box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.2), var(--shadow-md);
-    }
-
-    .search-box svg.search-icon {
+    .search-card svg.icon-search {
       color: var(--text-subtle);
-      margin-right: 12px;
+      margin-right: 14px;
       flex-shrink: 0;
     }
 
-    .search-box input {
+    .search-card input {
       flex: 1;
       border: none;
       background: transparent;
-      font-size: 1rem;
+      font-size: 1.02rem;
       color: var(--text);
       outline: none;
       font-family: inherit;
+      font-weight: 500;
     }
 
-    .search-box input::placeholder {
+    .search-card input::placeholder {
       color: var(--text-subtle);
+      font-weight: 400;
     }
 
-    .search-shortcut {
+    .search-shortcut-badge {
       display: flex;
       align-items: center;
       background: var(--bg-subtle);
-      color: var(--text-subtle);
+      color: var(--text-muted);
       font-size: 0.72rem;
       font-weight: 700;
       padding: 3px 8px;
@@ -491,7 +463,7 @@
       user-select: none;
     }
 
-    .search-clear {
+    .btn-clear-search {
       background: none;
       border: none;
       color: var(--text-subtle);
@@ -501,29 +473,29 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      margin-right: 4px;
+      margin-right: 6px;
     }
 
-    .search-clear:hover {
+    .btn-clear-search:hover {
       color: var(--text);
       background: var(--bg-subtle);
     }
 
     /* Category Filter Chips */
-    .filter-chips {
+    .filter-group {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 8px;
-      margin-top: 18px;
+      margin-top: 20px;
     }
 
-    .chip {
-      background: var(--bg-card);
+    .chip-btn {
+      background: var(--bg-white);
       border: 1px solid var(--border);
       border-radius: var(--radius-pill);
-      padding: 7px 16px;
-      font-size: 0.84rem;
+      padding: 8px 18px;
+      font-size: 0.86rem;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
@@ -532,60 +504,60 @@
       align-items: center;
       gap: 8px;
       user-select: none;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-xs);
     }
 
-    .chip:hover {
+    .chip-btn:hover {
       border-color: var(--uika-primary);
       color: var(--uika-primary);
       background: var(--uika-subtle);
       transform: translateY(-1px);
     }
 
-    .chip.active {
+    .chip-btn.active {
       background: var(--uika-primary);
       border-color: var(--uika-primary);
       color: #ffffff;
-      box-shadow: 0 3px 10px rgba(0, 96, 47, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
     }
 
-    .chip-count {
-      font-size: 0.72rem;
+    .chip-counter {
+      font-size: 0.74rem;
       padding: 2px 7px;
       border-radius: var(--radius-pill);
-      background: rgba(0, 0, 0, 0.08);
+      background: rgba(0, 0, 0, 0.06);
     }
 
-    .chip.active .chip-count {
+    .chip-btn.active .chip-counter {
       background: rgba(255, 255, 255, 0.25);
       color: #ffffff;
     }
 
     /* =========================================================
-       MAIN SERVICES CATALOG
+       MAIN SERVICES CATALOG (WHITE PROFESSIONAL CARDS)
        ========================================================= */
-    .main-content {
+    .main-section {
       max-width: 1260px;
       margin: 0 auto;
-      padding: 16px 24px 70px;
+      padding: 16px 24px 72px;
       width: 100%;
       flex: 1;
       position: relative;
       z-index: 1;
     }
 
-    .section-head {
+    .catalog-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
       padding-bottom: 14px;
       border-bottom: 1px solid var(--border);
     }
 
-    .section-title {
-      font-size: 1.3rem;
+    .catalog-title {
+      font-size: 1.35rem;
       font-weight: 800;
       color: var(--text);
       display: flex;
@@ -594,33 +566,33 @@
       letter-spacing: -0.01em;
     }
 
-    .section-title svg {
+    .catalog-title svg {
       color: var(--uika-primary);
     }
 
-    .catalog-meta {
+    .catalog-badge-total {
       font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--uika-primary);
+      background: var(--uika-subtle);
+      border: 1px solid var(--uika-border);
       padding: 5px 14px;
       border-radius: var(--radius-pill);
     }
 
     /* Cards Grid */
-    .services-grid {
+    .cards-layout {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       gap: 26px;
     }
 
-    /* Individual Institutional Card */
-    .app-card {
+    /* Individual White Card */
+    .service-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 26px;
+      padding: 28px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -630,30 +602,30 @@
       overflow: hidden;
     }
 
-    .app-card::before {
+    .service-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 4px;
-      background: var(--accent-gradient, linear-gradient(90deg, #00602f, #059669));
+      background: var(--card-accent, #006837);
       transition: height 0.25s ease;
     }
 
-    .app-card:hover {
+    .service-card:hover {
       transform: translateY(-6px);
       box-shadow: var(--shadow-lg), var(--shadow-glow);
       border-color: var(--border-strong);
       background: var(--bg-card-hover);
     }
 
-    .app-card:hover::before {
+    .service-card:hover::before {
       height: 6px;
     }
 
-    /* Card Top (Icon & Badges) */
-    .card-top {
+    /* Card Top Bar */
+    .card-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
@@ -661,7 +633,7 @@
       margin-bottom: 20px;
     }
 
-    .app-icon {
+    .service-icon-box {
       width: 58px;
       height: 58px;
       border-radius: var(--radius-md);
@@ -670,22 +642,22 @@
       justify-content: center;
       color: #ffffff;
       flex-shrink: 0;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
       transition: transform 0.3s ease;
     }
 
-    .app-card:hover .app-icon {
+    .service-card:hover .service-icon-box {
       transform: scale(1.08) rotate(-2deg);
     }
 
-    .card-badges {
+    .card-tag-group {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       gap: 6px;
     }
 
-    .status-badge {
+    .badge-online {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -693,24 +665,19 @@
       font-weight: 700;
       padding: 3px 10px;
       border-radius: var(--radius-pill);
-      background: rgba(16, 185, 129, 0.1);
+      background: #ecfdf5;
       color: #059669;
-      border: 1px solid rgba(16, 185, 129, 0.25);
+      border: 1px solid #a7f3d0;
     }
 
-    [data-theme="dark"] .status-badge {
-      color: #34d399;
-      background: rgba(16, 185, 129, 0.15);
-    }
-
-    .status-dot {
+    .dot-green {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: #10b981;
     }
 
-    .category-badge {
+    .badge-category {
       font-size: 0.7rem;
       font-weight: 700;
       padding: 2px 8px;
@@ -723,160 +690,158 @@
     }
 
     /* Card Body */
-    .card-body {
+    .card-content {
       margin-bottom: 24px;
     }
 
-    .app-title {
-      font-size: 1.35rem;
+    .service-name {
+      font-size: 1.38rem;
       font-weight: 800;
       letter-spacing: -0.01em;
       color: var(--text);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       line-height: 1.25;
     }
 
-    .app-desc {
-      font-size: 0.92rem;
+    .service-summary {
+      font-size: 0.93rem;
       color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
     }
 
-    /* Feature Checklist */
-    .feature-list {
+    /* Checklist of features */
+    .checklist {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 8px;
     }
 
-    .feature-item {
-      font-size: 0.83rem;
-      color: var(--text-muted);
+    .checklist-item {
+      font-size: 0.84rem;
+      color: var(--text-body);
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       line-height: 1.4;
+      font-weight: 500;
     }
 
-    .feature-item svg {
-      width: 15px;
-      height: 15px;
+    .checklist-item svg {
+      width: 16px;
+      height: 16px;
       color: var(--uika-primary);
       flex-shrink: 0;
     }
 
-    [data-theme="dark"] .feature-item svg {
-      color: #34d399;
-    }
-
     /* Card Footer */
-    .card-footer {
+    .card-foot {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 18px;
+      padding-top: 20px;
       border-top: 1px solid var(--border);
       margin-top: auto;
     }
 
-    .endpoint-tag {
+    .path-indicator {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.76rem;
       color: var(--text-subtle);
       background: var(--bg-subtle);
-      padding: 4px 9px;
+      padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid var(--border);
+      font-weight: 600;
     }
 
-    .btn-action {
+    .btn-open-app {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 20px;
+      padding: 10px 22px;
       border-radius: var(--radius-pill);
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: #ffffff;
-      background: var(--btn-color, var(--uika-primary));
-      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      background: var(--card-btn, var(--uika-primary));
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .btn-action:hover {
+    .btn-open-app:hover {
       filter: brightness(1.1);
       transform: translateX(3px);
-      box-shadow: 0 5px 14px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
       color: #ffffff;
     }
 
-    .btn-action svg {
+    .btn-open-app svg {
       transition: transform 0.2s ease;
     }
 
-    .app-card:hover .btn-action svg {
+    .service-card:hover .btn-open-app svg {
       transform: translateX(4px);
     }
 
-    /* Empty Search State */
-    .empty-state {
+    /* Empty state */
+    .empty-search-box {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 70px 20px;
-      background: var(--bg-card);
+      padding: 72px 20px;
+      background: var(--bg-white);
       border: 2px dashed var(--border);
       border-radius: var(--radius-lg);
       display: none;
     }
 
-    .empty-state.show {
+    .empty-search-box.show {
       display: block;
     }
 
-    .empty-icon {
+    .empty-search-icon {
       font-size: 3.2rem;
       margin-bottom: 12px;
     }
 
-    .empty-state h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
+    .empty-search-box h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
       color: var(--text);
       margin-bottom: 6px;
     }
 
-    .empty-state p {
+    .empty-search-box p {
       color: var(--text-muted);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
 
     /* =========================================================
-       INSTITUTIONAL TRUST & INTEGRATION BANNER
+       TRUST & SECURITY BANNER
        ========================================================= */
-    .trust-banner {
-      background: var(--bg-card);
+    .trust-container {
+      background: var(--bg-white);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 30px;
-      margin-top: 48px;
+      padding: 32px;
+      margin-top: 52px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 28px;
       box-shadow: var(--shadow-sm);
     }
 
-    .trust-item {
+    .trust-card {
       display: flex;
       align-items: flex-start;
       gap: 16px;
     }
 
-    .trust-icon {
-      width: 44px;
-      height: 44px;
+    .trust-icon-box {
+      width: 46px;
+      height: 46px;
       border-radius: var(--radius-md);
       background: var(--uika-subtle);
       color: var(--uika-primary);
@@ -887,124 +852,115 @@
       border: 1px solid var(--uika-border);
     }
 
-    [data-theme="dark"] .trust-icon {
-      background: rgba(16, 185, 129, 0.12);
-      color: #34d399;
-      border-color: rgba(16, 185, 129, 0.25);
-    }
-
-    .trust-content h4 {
-      font-size: 1rem;
-      font-weight: 700;
+    .trust-details h4 {
+      font-size: 1.02rem;
+      font-weight: 800;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
-    .trust-content p {
-      font-size: 0.85rem;
+    .trust-details p {
+      font-size: 0.88rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     /* =========================================================
        FOOTER
        ========================================================= */
     .footer {
-      background: var(--bg-card);
+      background: var(--bg-white);
       border-top: 1px solid var(--border);
-      padding: 48px 24px 32px;
+      padding: 52px 24px 34px;
       margin-top: auto;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
       position: relative;
       z-index: 1;
     }
 
-    .footer-inner {
+    .footer-wrapper {
       max-width: 1260px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 36px;
     }
 
-    .footer-top {
+    .footer-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
-      gap: 40px;
-      padding-bottom: 32px;
+      gap: 48px;
+      padding-bottom: 36px;
       border-bottom: 1px solid var(--border);
     }
 
     .footer-identity {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
-    .footer-brand {
+    .footer-brand-box {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .footer-desc {
-      font-size: 0.88rem;
+    .footer-about {
+      font-size: 0.9rem;
       color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 480px;
+      line-height: 1.65;
+      max-width: 500px;
     }
 
-    .footer-col h5 {
+    .footer-column h5 {
       font-size: 0.95rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--text);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    .footer-links {
+    .footer-nav {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      font-size: 0.88rem;
+      gap: 11px;
+      font-size: 0.9rem;
     }
 
-    .footer-links a {
+    .footer-nav a {
       color: var(--text-muted);
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      font-weight: 500;
     }
 
-    .footer-links a:hover {
+    .footer-nav a:hover {
       color: var(--uika-primary);
       transform: translateX(3px);
     }
 
-    [data-theme="dark"] .footer-links a:hover {
-      color: #34d399;
-    }
-
-    .footer-bottom {
+    .footer-bottom-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: var(--text-subtle);
     }
 
     /* =========================================================
-       RESPONSIVE DESIGN
+       RESPONSIVE ADJUSTMENTS
        ========================================================= */
     @media (max-width: 900px) {
-      .footer-top {
+      .footer-grid {
         grid-template-columns: 1fr;
-        gap: 28px;
+        gap: 32px;
       }
     }
 
@@ -1012,22 +968,22 @@
       .topbar-left .motto-pill {
         display: none;
       }
-      .univ-name {
+      .univ-title {
         display: none;
       }
-      .portal-name {
-        font-size: 1.15rem;
+      .portal-title {
+        font-size: 1.2rem;
       }
       .hero {
-        padding: 36px 16px 20px;
+        padding: 38px 16px 24px;
       }
-      .services-grid {
+      .cards-layout {
         grid-template-columns: 1fr;
       }
-      .search-shortcut {
+      .search-shortcut-badge {
         display: none;
       }
-      .footer-bottom {
+      .footer-bottom-row {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -1052,12 +1008,12 @@
       </div>
 
       <div class="topbar-right">
-        <div class="system-status">
-          <span class="status-ping"></span>
-          <span>Seluruh Sistem Normal</span>
+        <div class="server-status">
+          <span class="status-dot-pulse"></span>
+          <span>Seluruh Sistem Aktif</span>
         </div>
         <a href="https://uika-bogor.ac.id" target="_blank" rel="noopener noreferrer" title="Website Resmi UIKA Bogor">
-          <span>Website Utama</span>
+          <span>Website UIKA</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
             <polyline points="15 3 21 3 21 9"/>
@@ -1074,47 +1030,42 @@
   <header class="header">
     <div class="header-inner">
       <!-- UIKA Identity Logo & Title -->
-      <a href="/" class="brand" title="Kembali ke Beranda Utility Hub">
+      <a href="/" class="brand" title="Portal Layanan Digital UIKA Bogor">
         <div class="brand-emblem">
-          <!-- Official UIKA Bogor Vector Emblem (Green Shield, Islamic Arch, Star & Book) -->
-          <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Official UIKA Bogor Vector Emblem (Green Shield, Golden Border, Book & Star) -->
+          <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="shieldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#00602f"/>
-                <stop offset="100%" stop-color="#003d1c"/>
+                <stop offset="0%" stop-color="#006837"/>
+                <stop offset="100%" stop-color="#004622"/>
               </linearGradient>
               <linearGradient id="goldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#fbbf24"/>
                 <stop offset="100%" stop-color="#d97706"/>
               </linearGradient>
             </defs>
-            <!-- Outer Shield Base -->
             <path d="M32 4L10 14V34C10 47.5 19.5 59.8 32 63C44.5 59.8 54 47.5 54 34V14L32 4Z" fill="url(#shieldGrad)" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linejoin="round"/>
-            <!-- Inner Islamic Arch Outline -->
             <path d="M32 12C23 12 18 19 18 28V46C22.5 48.5 27 49.5 32 49.5C37 49.5 41.5 48.5 46 46V28C46 19 41 12 32 12Z" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5" fill="none"/>
-            <!-- Golden Star & Minaret Torch -->
             <polygon points="32,15 34,20 39,20 35,23 37,28 32,25 27,28 29,23 25,20 30,20" fill="url(#goldGrad)"/>
-            <!-- Open Book / Al-Qur'an (Center Academic Symbol) -->
             <path d="M22 36C26 34 30 35 32 37C34 35 38 34 42 36V45C38 43 34 44 32 46C30 44 26 43 22 45V36Z" fill="#ffffff" opacity="0.95"/>
-            <line x1="32" y1="37" x2="32" y2="46" stroke="#004d25" stroke-width="1.5"/>
-            <!-- Academic Laurel Base Wreath -->
+            <line x1="32" y1="37" x2="32" y2="46" stroke="#004622" stroke-width="1.5"/>
             <path d="M19 50C24 53 40 53 45 50" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
-        <div class="brand-title">
-          <span class="univ-name">Universitas Ibn Khaldun Bogor</span>
-          <span class="portal-name">
+        <div class="brand-info">
+          <span class="univ-title">Universitas Ibn Khaldun Bogor</span>
+          <span class="portal-title">
             UIKA Utility
-            <span class="portal-badge">Hub</span>
+            <span class="badge-hub">Hub</span>
           </span>
         </div>
       </a>
 
-      <!-- Navigation & Action Buttons -->
+      <!-- Header Actions -->
       <div class="header-actions">
         <!-- Direct E-Portal SSO Launch Button -->
-        <a href="https://eportal.uika-bogor.ac.id" target="_blank" rel="noopener noreferrer" class="btn-eportal" title="Buka Portal Utama E-Portal UIKA">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="https://eportal.uika-bogor.ac.id" target="_blank" rel="noopener noreferrer" class="btn-portal-main" title="Buka Portal E-Portal UIKA">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M15 3h6v6"/>
             <path d="M10 14L21 3"/>
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -1122,9 +1073,9 @@
           <span>E-Portal UIKA</span>
         </a>
 
-        <!-- Dark / Light Theme Toggle Button -->
-        <button id="themeToggle" class="btn-theme" aria-label="Ganti Tema Terang/Gelap" title="Ganti Tema (Terang / Gelap)">
-          <svg id="themeIconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <!-- Light/Dark Mode Switcher -->
+        <button id="themeToggleBtn" class="btn-theme-toggle" aria-label="Ganti Mode Terang / Gelap" title="Ganti Mode">
+          <svg id="iconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
             <circle cx="12" cy="12" r="5"/>
             <line x1="12" y1="1" x2="12" y2="3"/>
             <line x1="12" y1="21" x2="12" y2="23"/>
@@ -1135,7 +1086,7 @@
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </svg>
-          <svg id="themeIconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg id="iconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
@@ -1144,66 +1095,66 @@
   </header>
 
   <!-- =========================================================
-       HERO ACADEMIC SECTION & SEARCH CONTROLS
+       HERO ACADEMIC SECTION
        ========================================================= -->
   <section class="hero">
-    <div class="hero-pretitle">
+    <div class="hero-badge">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
       </svg>
-      <span>Pusat Layanan &amp; Utilitas Digital Kampus Terpadu</span>
+      <span>Portal Layanan &amp; Utilitas Digital Kampus Terpadu</span>
     </div>
 
-    <h2 class="hero-title">
-      Gerbang Layanan Digital Civitas Akademika <span class="gradient-text">UIKA Bogor</span>
-    </h2>
+    <h1 class="hero-heading">
+      Gerbang Layanan Digital Civitas Akademika <span class="brand-highlight">UIKA Bogor</span>
+    </h1>
 
-    <p class="hero-subtitle">
+    <p class="hero-desc">
       Akses terpusat untuk berbagai aplikasi produktivitas, pembuatan formulir survei riset, pengolahan dokumen PDF, absensi perkuliahan, uji deteksi teks AI, dan perancangan denah kampus.
     </p>
 
-    <!-- Search & Filter Controls -->
-    <div class="search-wrapper">
-      <div class="search-box">
-        <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Search Box -->
+    <div class="search-container">
+      <div class="search-card">
+        <svg class="icon-search" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" id="searchInput" placeholder="Cari layanan (contoh: survei, kuis, absen, pdf, ai, denah)..." autocomplete="off" spellcheck="false">
-        <button id="searchClear" class="search-clear" aria-label="Bersihkan pencarian">
+        <input type="text" id="liveSearchInput" placeholder="Cari layanan (contoh: survei, kuis, absen, pdf, ai, denah)..." autocomplete="off" spellcheck="false">
+        <button id="btnClearSearch" class="btn-clear-search" aria-label="Hapus pencarian">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
-        <span class="search-shortcut" title="Tekan tombol / untuk langsung mencari">/</span>
+        <span class="search-shortcut-badge" title="Tekan tombol / untuk langsung mencari">/</span>
       </div>
 
-      <!-- Category Filter Chips -->
-      <div class="filter-chips">
-        <button class="chip active" data-category="all">
+      <!-- Filter Buttons -->
+      <div class="filter-group">
+        <button class="chip-btn active" data-filter="all">
           <span>Semua Layanan</span>
-          <span class="chip-count">5</span>
+          <span class="chip-counter">5</span>
         </button>
-        <button class="chip" data-category="survey">
+        <button class="chip-btn" data-filter="survey">
           <span>Survei &amp; Formulir</span>
-          <span class="chip-count">1</span>
+          <span class="chip-counter">1</span>
         </button>
-        <button class="chip" data-category="doc">
+        <button class="chip-btn" data-filter="doc">
           <span>Olah Dokumen PDF</span>
-          <span class="chip-count">1</span>
+          <span class="chip-counter">1</span>
         </button>
-        <button class="chip" data-category="attendance">
+        <button class="chip-btn" data-filter="attendance">
           <span>Kehadiran</span>
-          <span class="chip-count">1</span>
+          <span class="chip-counter">1</span>
         </button>
-        <button class="chip" data-category="ai">
+        <button class="chip-btn" data-filter="ai">
           <span>AI &amp; Riset</span>
-          <span class="chip-count">1</span>
+          <span class="chip-counter">1</span>
         </button>
-        <button class="chip" data-category="design">
+        <button class="chip-btn" data-filter="design">
           <span>Desain &amp; Denah</span>
-          <span class="chip-count">1</span>
+          <span class="chip-counter">1</span>
         </button>
       </div>
     </div>
@@ -1212,32 +1163,32 @@
   <!-- =========================================================
        MAIN SERVICES CATALOG GRID
        ========================================================= -->
-  <main class="main-content">
-    <div class="section-head">
-      <div class="section-title">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <main class="main-section">
+    <div class="catalog-header">
+      <div class="catalog-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7"/>
           <rect x="14" y="3" width="7" height="7"/>
           <rect x="14" y="14" width="7" height="7"/>
           <rect x="3" y="14" width="7" height="7"/>
         </svg>
-        <span>Katalog Aplikasi Aktif</span>
+        <span>Katalog Layanan Digital</span>
       </div>
-      <div class="catalog-meta" id="visibleCounter">5 Aplikasi Siap Digunakan</div>
+      <div class="catalog-badge-total" id="badgeTotalServices">5 Layanan Siap Digunakan</div>
     </div>
 
-    <div class="services-grid" id="servicesGrid">
+    <div class="cards-layout" id="cardsContainer">
 
       <!-- ==========================================
            1. UIKA FORM (U-FORM)
            ========================================== -->
-      <article class="app-card"
-               data-category="survey"
-               data-keywords="uika form uform formulir survei pendaftaran kuis ujian penilaian otomatis auto grading sertifikat qr excel sso eportal"
-               style="--accent-gradient: linear-gradient(90deg, #00602f, #059669); --btn-color: #00602f;">
+      <article class="service-card"
+               data-filter-group="survey"
+               data-search-terms="uika form uform formulir survei pendaftaran kuis ujian penilaian otomatis auto grading sertifikat qr excel sso eportal"
+               style="--card-accent: #006837; --card-btn: #006837;">
         <div>
-          <div class="card-top">
-            <div class="app-icon" style="background: linear-gradient(135deg, #00602f 0%, #059669 100%);">
+          <div class="card-head">
+            <div class="service-icon-box" style="background: linear-gradient(135deg, #006837 0%, #059669 100%);">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>
@@ -1246,40 +1197,40 @@
                 <polyline points="10 9 9 9 8 9"/>
               </svg>
             </div>
-            <div class="card-badges">
-              <span class="status-badge">
-                <span class="status-dot"></span>
+            <div class="card-tag-group">
+              <span class="badge-online">
+                <span class="dot-green"></span>
                 <span>Aktif · Terintegrasi</span>
               </span>
-              <span class="category-badge">Survei &amp; Kuis</span>
+              <span class="badge-category">Survei &amp; Kuis</span>
             </div>
           </div>
 
-          <div class="card-body">
-            <h3 class="app-title">UIKA Form (U-Form)</h3>
-            <p class="app-desc">
-              Platform pembuatan formulir daring, kuesioner survei penelitian, pendaftaran seminar, dan kuis perkuliahan dilengkapi sistem penilaian otomatis serta penerbitan sertifikat digital instan ber-QR code.
+          <div class="card-content">
+            <h2 class="service-name">UIKA Form (U-Form)</h2>
+            <p class="service-summary">
+              Platform pembuatan formulir daring, kuesioner survei penelitian dosen/mahasiswa, pendaftaran kegiatan, dan kuis perkuliahan dilengkapi sistem penilaian otomatis serta penerbitan sertifikat digital ber-QR code.
             </p>
-            <ul class="feature-list">
-              <li class="feature-item">
+            <ul class="checklist">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Pembuat survei &amp; kuis berwaktu (timer anti-curang)</span>
+                <span>Pembuat survei &amp; kuis berwaktu (timer kuis terpusat)</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Desainer visual sertifikat A4 drag-and-drop &amp; verifikasi QR</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Terintegrasi SSO E-Portal &amp; izin role Mahasiswa/Dosen</span>
+                <span>Sinkronisasi otomatis hak akses role E-Portal UIKA</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="endpoint-tag">/u-form/</span>
-          <a href="/u-form/" class="btn-action" title="Buka Aplikasi UIKA Form">
+        <div class="card-foot">
+          <span class="path-indicator">/u-form/</span>
+          <a href="/u-form/" class="btn-open-app" title="Buka Aplikasi UIKA Form">
             <span>Buka Layanan</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1292,13 +1243,13 @@
       <!-- ==========================================
            2. OLAHPDF
            ========================================== -->
-      <article class="app-card"
-               data-category="doc"
-               data-keywords="olahpdf pdf merge gabung berkas split pisah halaman kompres compress konversi convert dokumen cetak proteksi"
-               style="--accent-gradient: linear-gradient(90deg, #b91c1c, #ea580c); --btn-color: #b91c1c;">
+      <article class="service-card"
+               data-filter-group="doc"
+               data-search-terms="olahpdf pdf merge gabung berkas split pisah halaman kompres compress konversi convert dokumen cetak proteksi"
+               style="--card-accent: #dc2626; --card-btn: #dc2626;">
         <div>
-          <div class="card-top">
-            <div class="app-icon" style="background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);">
+          <div class="card-head">
+            <div class="service-icon-box" style="background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>
@@ -1306,30 +1257,30 @@
                 <path d="M16 12h2v4h-2z"/>
               </svg>
             </div>
-            <div class="card-badges">
-              <span class="status-badge">
-                <span class="status-dot"></span>
+            <div class="card-tag-group">
+              <span class="badge-online">
+                <span class="dot-green"></span>
                 <span>Aktif</span>
               </span>
-              <span class="category-badge">Dokumen PDF</span>
+              <span class="badge-category">Dokumen PDF</span>
             </div>
           </div>
 
-          <div class="card-body">
-            <h3 class="app-title">OlahPDF</h3>
-            <p class="app-desc">
-              Suite utilitas komprehensif pengolahan berkas PDF tanpa batasan: gabungkan banyak file lampiran skripsi, pisahkan halaman penting, kompresi ukuran file, serta konversi dokumen akademik secara cepat.
+          <div class="card-content">
+            <h2 class="service-name">OlahPDF</h2>
+            <p class="service-summary">
+              Suite utilitas komprehensif pengolahan berkas PDF tanpa batasan: gabungkan berkas lampiran skripsi, pisahkan halaman penting, kompresi ukuran file, serta konversi dokumen akademik secara cepat.
             </p>
-            <ul class="feature-list">
-              <li class="feature-item">
+            <ul class="checklist">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Gabung (Merge) &amp; Pisah (Split) dokumen PDF tanpa batasan</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Kompresi ukuran berkas PDF optimal untuk upload portal</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Diproses langsung di jaringan server lokal kampus (aman)</span>
               </li>
@@ -1337,9 +1288,9 @@
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="endpoint-tag">/pdf/</span>
-          <a href="/pdf/" class="btn-action" title="Buka Aplikasi OlahPDF">
+        <div class="card-foot">
+          <span class="path-indicator">/pdf/</span>
+          <a href="/pdf/" class="btn-open-app" title="Buka Aplikasi OlahPDF">
             <span>Buka Layanan</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1352,43 +1303,43 @@
       <!-- ==========================================
            3. PRESENSI APP
            ========================================== -->
-      <article class="app-card"
-               data-category="attendance"
-               data-keywords="presensi absen kehadiran absensi perkuliahan dosen mahasiswa sdm kegiatan qr checkin jadwal kuliah"
-               style="--accent-gradient: linear-gradient(90deg, #6d28d9, #4f46e5); --btn-color: #6d28d9;">
+      <article class="service-card"
+               data-filter-group="attendance"
+               data-search-terms="presensi absen kehadiran absensi perkuliahan dosen mahasiswa sdm kegiatan qr checkin jadwal kuliah"
+               style="--card-accent: #6366f1; --card-btn: #4f46e5;">
         <div>
-          <div class="card-top">
-            <div class="app-icon" style="background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);">
+          <div class="card-head">
+            <div class="service-icon-box" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                 <circle cx="8.5" cy="7" r="4"/>
                 <polyline points="17 11 19 13 23 9"/>
               </svg>
             </div>
-            <div class="card-badges">
-              <span class="status-badge">
-                <span class="status-dot"></span>
+            <div class="card-tag-group">
+              <span class="badge-online">
+                <span class="dot-green"></span>
                 <span>Aktif</span>
               </span>
-              <span class="category-badge">Kehadiran</span>
+              <span class="badge-category">Kehadiran</span>
             </div>
           </div>
 
-          <div class="card-body">
-            <h3 class="app-title">Presensi App</h3>
-            <p class="app-desc">
+          <div class="card-content">
+            <h2 class="service-name">Presensi App</h2>
+            <p class="service-summary">
               Sistem pencatatan kehadiran dan absensi perkuliahan digital terintegrasi bagi mahasiswa, dosen, serta tenaga kependidikan guna transparansi monitoring absensi akademik UIKA Bogor.
             </p>
-            <ul class="feature-list">
-              <li class="feature-item">
+            <ul class="checklist">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Validasi presensi cepat via scan QR Code perkuliahan</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Rekapitulasi absensi otomatis per mata kuliah &amp; semester</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Dashboard pelaporan kehadiran akurat civitas kampus</span>
               </li>
@@ -1396,9 +1347,9 @@
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="endpoint-tag">/presensi</span>
-          <a href="/presensi" class="btn-action" title="Buka Presensi App">
+        <div class="card-foot">
+          <span class="path-indicator">/presensi</span>
+          <a href="/presensi" class="btn-open-app" title="Buka Presensi App">
             <span>Buka Layanan</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1411,43 +1362,43 @@
       <!-- ==========================================
            4. DETEKTOR TEKS AI
            ========================================== -->
-      <article class="app-card"
-               data-category="ai"
-               data-keywords="detektor teks ai artificial intelligence chatgpt plagiasi cek plagiarisme karya ilmiah skripsi tesis tugas riset integritas"
-               style="--accent-gradient: linear-gradient(90deg, #1d4ed8, #0284c7); --btn-color: #1d4ed8;">
+      <article class="service-card"
+               data-filter-group="ai"
+               data-search-terms="detektor teks ai artificial intelligence chatgpt plagiasi cek plagiarisme karya ilmiah skripsi tesis tugas riset integritas"
+               style="--card-accent: #0284c7; --card-btn: #0284c7;">
         <div>
-          <div class="card-top">
-            <div class="app-icon" style="background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%);">
+          <div class="card-head">
+            <div class="service-icon-box" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
                 <path d="M12 6v6l4 2"/>
                 <circle cx="12" cy="12" r="2"/>
               </svg>
             </div>
-            <div class="card-badges">
-              <span class="status-badge">
-                <span class="status-dot"></span>
+            <div class="card-tag-group">
+              <span class="badge-online">
+                <span class="dot-green"></span>
                 <span>Aktif</span>
               </span>
-              <span class="category-badge">AI &amp; Riset</span>
+              <span class="badge-category">AI &amp; Riset</span>
             </div>
           </div>
 
-          <div class="card-body">
-            <h3 class="app-title">Detektor Teks AI</h3>
-            <p class="app-desc">
+          <div class="card-content">
+            <h2 class="service-name">Detektor Teks AI</h2>
+            <p class="service-summary">
               Instrumen pengujian integritas akademik untuk mendeteksi orisinalitas naskah skripsi, tesis, dan karya ilmiah dari kemungkinan penggunaan kecerdasan buatan (ChatGPT, Gemini, Claude, dll.).
             </p>
-            <ul class="feature-list">
-              <li class="feature-item">
+            <ul class="checklist">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Analisis probabilitas orisinalitas teks berbasis model AI</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Penandaan visual kalimat yang terindikasi buatan generator</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Mendukung karya tulis berbahasa Indonesia dan Inggris</span>
               </li>
@@ -1455,9 +1406,9 @@
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="endpoint-tag">/detector-text/</span>
-          <a href="/detector-text/" class="btn-action" title="Buka Detektor Teks AI">
+        <div class="card-foot">
+          <span class="path-indicator">/detector-text/</span>
+          <a href="/detector-text/" class="btn-open-app" title="Buka Detektor Teks AI">
             <span>Buka Layanan</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1470,43 +1421,43 @@
       <!-- ==========================================
            5. ARCHITECT (DENAH 2D/3D)
            ========================================== -->
-      <article class="app-card"
-               data-category="design"
-               data-keywords="architect perancang denah arsitektur 2d 3d tata letak tata ruang laboratorium gedung kelas fasilitas kampus interior"
-               style="--accent-gradient: linear-gradient(90deg, #b45309, #d97706); --btn-color: #b45309;">
+      <article class="service-card"
+               data-filter-group="design"
+               data-search-terms="architect perancang denah arsitektur 2d 3d tata letak tata ruang laboratorium gedung kelas fasilitas kampus interior"
+               style="--card-accent: #d97706; --card-btn: #d97706;">
         <div>
-          <div class="card-top">
-            <div class="app-icon" style="background: linear-gradient(135deg, #b45309 0%, #d97706 100%);">
+          <div class="card-head">
+            <div class="service-icon-box" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="12 2 2 7 12 12 22 7 12 2"/>
                 <polyline points="2 17 12 22 22 17"/>
                 <polyline points="2 12 12 17 22 12"/>
               </svg>
             </div>
-            <div class="card-badges">
-              <span class="status-badge">
-                <span class="status-dot"></span>
+            <div class="card-tag-group">
+              <span class="badge-online">
+                <span class="dot-green"></span>
                 <span>Aktif</span>
               </span>
-              <span class="category-badge">Desain 2D/3D</span>
+              <span class="badge-category">Desain 2D/3D</span>
             </div>
           </div>
 
-          <div class="card-body">
-            <h3 class="app-title">Architect (Denah 2D/3D)</h3>
-            <p class="app-desc">
+          <div class="card-content">
+            <h2 class="service-name">Architect (Denah 2D/3D)</h2>
+            <p class="service-summary">
               Perangkat lunak visual perancangan denah arsitektur bangunan, tata letak ruang kelas, laboratorium, dan visualisasi interior fasilitas kampus dalam format denah 2D serta simulasi 3D interaktif.
             </p>
-            <ul class="feature-list">
-              <li class="feature-item">
+            <ul class="checklist">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Desain layout denah 2D akurat dengan skala presisi</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Visualisasi 3D ruang dan penataan interior perabot kampus</span>
               </li>
-              <li class="feature-item">
+              <li class="checklist-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Ekspor cetak gambar denah resolusi tinggi &amp; blueprint</span>
               </li>
@@ -1514,9 +1465,9 @@
           </div>
         </div>
 
-        <div class="card-footer">
-          <span class="endpoint-tag">/architect/</span>
-          <a href="/architect/" class="btn-action" title="Buka Architect 2D/3D">
+        <div class="card-foot">
+          <span class="path-indicator">/architect/</span>
+          <a href="/architect/" class="btn-open-app" title="Buka Architect 2D/3D">
             <span>Buka Layanan</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1527,52 +1478,52 @@
       </article>
 
       <!-- Empty Filter/Search State -->
-      <div id="emptyCatalog" class="empty-state">
-        <div class="empty-icon">🔍</div>
+      <div id="searchEmptyNotice" class="empty-search-box">
+        <div class="empty-search-icon">🔍</div>
         <h3>Layanan Tidak Ditemukan</h3>
-        <p>Tidak ada aplikasi atau sistem yang cocok dengan kata kunci yang Anda masukkan.</p>
+        <p>Tidak ada aplikasi atau sistem yang cocok dengan kata kunci pencarian Anda.</p>
       </div>
 
     </div>
 
     <!-- =========================================================
-         CAMPUS TRUST & ECOSYSTEM BANNER
+         TRUST & SECURITY HIGHLIGHT
          ========================================================= -->
-    <section class="trust-banner">
-      <div class="trust-item">
-        <div class="trust-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <section class="trust-container">
+      <div class="trust-card">
+        <div class="trust-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <div class="trust-content">
+        <div class="trust-details">
           <h4>Single Sign-On (SSO) Terpadu</h4>
-          <p>Terhubung langsung dengan akun E-Portal UIKA Bogor untuk memudahkan akses tanpa perlu registrasi ulang.</p>
+          <p>Terhubung langsung dengan akun resmi E-Portal UIKA Bogor untuk memudahkan akses tanpa perlu registrasi ulang.</p>
         </div>
       </div>
 
-      <div class="trust-item">
-        <div class="trust-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="trust-card">
+        <div class="trust-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
         </div>
-        <div class="trust-content">
+        <div class="trust-details">
           <h4>Keamanan &amp; Enkripsi SSL Resmi</h4>
           <p>Seluruh transmisi berkas dan data dienkripsi dengan sertifikat SSL resmi domain universitas (*.uika-bogor.ac.id).</p>
         </div>
       </div>
 
-      <div class="trust-item">
-        <div class="trust-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="trust-card">
+        <div class="trust-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
           </svg>
         </div>
-        <div class="trust-content">
+        <div class="trust-details">
           <h4>Server Lokal UIKA Cloud</h4>
-          <p>Dihosting pada server internal kampus dengan latensi rendah, kecepatan tinggi, dan privasi data terjamin.</p>
+          <p>Dihosting pada server internal kampus dengan latensi rendah, kecepatan transfer tinggi, dan privasi data terjamin.</p>
         </div>
       </div>
     </section>
@@ -1582,32 +1533,32 @@
        INSTITUTIONAL FOOTER
        ========================================================= -->
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-top">
+    <div class="footer-wrapper">
+      <div class="footer-grid">
         <!-- University Identity -->
         <div class="footer-identity">
-          <div class="footer-brand">
-            <div class="brand-emblem" style="width:40px; height:40px;">
-              <svg width="40" height="40" viewBox="0 0 64 64" fill="none">
-                <path d="M32 4L10 14V34C10 47.5 19.5 59.8 32 63C44.5 59.8 54 47.5 54 34V14L32 4Z" fill="#00602f" stroke="#d97706" stroke-width="2"/>
+          <div class="footer-brand-box">
+            <div class="brand-emblem" style="width:42px; height:42px;">
+              <svg width="42" height="42" viewBox="0 0 64 64" fill="none">
+                <path d="M32 4L10 14V34C10 47.5 19.5 59.8 32 63C44.5 59.8 54 47.5 54 34V14L32 4Z" fill="#006837" stroke="#d97706" stroke-width="2"/>
                 <polygon points="32,15 34,20 39,20 35,23 37,28 32,25 27,28 29,23 25,20 30,20" fill="#fbbf24"/>
                 <path d="M22 36C26 34 30 35 32 37C34 35 38 34 42 36V45C38 43 34 44 32 46C30 44 26 43 22 45V36Z" fill="#ffffff"/>
               </svg>
             </div>
             <div>
               <h4 style="font-size:1.05rem; font-weight:800; color:var(--text); line-height:1.2;">Universitas Ibn Khaldun Bogor</h4>
-              <p style="font-size:0.78rem; font-weight:600; color:var(--uika-primary);">Pusat Pengelolaan Teknologi Informasi &amp; Komunikasi (PTIK)</p>
+              <p style="font-size:0.8rem; font-weight:700; color:var(--uika-primary);">Pusat Pengelolaan Teknologi Informasi &amp; Komunikasi (PTIK)</p>
             </div>
           </div>
-          <p class="footer-desc">
+          <p class="footer-about">
             Portal Layanan &amp; Utilitas Digital (UIKA Utility Hub) adalah gerbang komputasi terpusat untuk menunjang aktivitas pembelajaran, penelitian, administrasi perkuliahan, dan pengolahan dokumen civitas akademika UIKA Bogor.
           </p>
         </div>
 
-        <!-- Academic Portals Column -->
-        <div class="footer-col">
+        <!-- Academic Ecosystem -->
+        <div class="footer-column">
           <h5>Ekosistem Kampus</h5>
-          <ul class="footer-links">
+          <ul class="footer-nav">
             <li><a href="https://uika-bogor.ac.id" target="_blank" rel="noopener noreferrer">Website Utama UIKA</a></li>
             <li><a href="https://eportal.uika-bogor.ac.id" target="_blank" rel="noopener noreferrer">E-Portal Mahasiswa &amp; Dosen</a></li>
             <li><a href="https://siakad.uika-bogor.ac.id" target="_blank" rel="noopener noreferrer">SIAKAD Online</a></li>
@@ -1615,10 +1566,10 @@
           </ul>
         </div>
 
-        <!-- Direct Utilities Column -->
-        <div class="footer-col">
+        <!-- Server Applications -->
+        <div class="footer-column">
           <h5>Layanan Server</h5>
-          <ul class="footer-links">
+          <ul class="footer-nav">
             <li><a href="/u-form/">UIKA Form (U-Form)</a></li>
             <li><a href="/pdf/">OlahPDF Suite</a></li>
             <li><a href="/presensi">Presensi App</a></li>
@@ -1628,8 +1579,8 @@
         </div>
       </div>
 
-      <!-- Footer Bottom -->
-      <div class="footer-bottom">
+      <!-- Footer Bottom Row -->
+      <div class="footer-bottom-row">
         <p>Kampus UIKA: Jl. KH. Sholeh Iskandar No. 1, Kedung Badak, Tanah Sareal, Kota Bogor, Jawa Barat 16162</p>
         <p>&copy; 2026 Universitas Ibn Khaldun Bogor. Hak Cipta Dilindungi Undang-Undang.</p>
       </div>
@@ -1641,16 +1592,16 @@
        ========================================================= -->
   <script>
     (function () {
-      // 1. Dark/Light Theme Controller
+      // 1. Theme Management (Default ALWAYS LIGHT for professional institutional look)
       const THEME_KEY = 'uika_utility_theme_pref';
       const root = document.documentElement;
-      const themeToggle = document.getElementById('themeToggle');
-      const iconSun = document.getElementById('themeIconSun');
-      const iconMoon = document.getElementById('themeIconMoon');
+      const themeToggle = document.getElementById('themeToggleBtn');
+      const iconSun = document.getElementById('iconSun');
+      const iconMoon = document.getElementById('iconMoon');
 
-      function setTheme(t) {
-        root.setAttribute('data-theme', t);
-        if (t === 'dark') {
+      function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
           iconSun.style.display = 'block';
           iconMoon.style.display = 'none';
         } else {
@@ -1659,73 +1610,73 @@
         }
       }
 
-      const stored = localStorage.getItem(THEME_KEY);
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(stored || (prefersDark ? 'dark' : 'light'));
+      // STRICTLY DEFAULT TO LIGHT THEME
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
 
       themeToggle.addEventListener('click', () => {
         const cur = root.getAttribute('data-theme') || 'light';
         const next = cur === 'dark' ? 'light' : 'dark';
-        setTheme(next);
+        applyTheme(next);
         localStorage.setItem(THEME_KEY, next);
       });
 
       // 2. Real-time Search & Filter System
-      const searchInput = document.getElementById('searchInput');
-      const searchClear = document.getElementById('searchClear');
-      const chips = document.querySelectorAll('.chip');
-      const cards = document.querySelectorAll('.app-card');
-      const emptyState = document.getElementById('emptyCatalog');
-      const counter = document.getElementById('visibleCounter');
+      const searchInput = document.getElementById('liveSearchInput');
+      const clearSearchBtn = document.getElementById('btnClearSearch');
+      const filterChips = document.querySelectorAll('.chip-btn');
+      const serviceCards = document.querySelectorAll('.service-card');
+      const emptyStateBox = document.getElementById('searchEmptyNotice');
+      const badgeTotal = document.getElementById('badgeTotalServices');
 
-      let activeCategory = 'all';
-      let activeQuery = '';
+      let currentCategory = 'all';
+      let searchQuery = '';
 
-      function updateCatalog() {
-        let visible = 0;
-        const q = activeQuery.trim().toLowerCase();
+      function filterServices() {
+        let count = 0;
+        const q = searchQuery.trim().toLowerCase();
 
-        cards.forEach(card => {
-          const cat = card.getAttribute('data-category');
-          const title = (card.querySelector('.app-title')?.innerText || '').toLowerCase();
-          const desc = (card.querySelector('.app-desc')?.innerText || '').toLowerCase();
-          const kw = (card.getAttribute('data-keywords') || '').toLowerCase();
+        serviceCards.forEach(card => {
+          const group = card.getAttribute('data-filter-group');
+          const title = (card.querySelector('.service-name')?.innerText || '').toLowerCase();
+          const desc = (card.querySelector('.service-summary')?.innerText || '').toLowerCase();
+          const terms = (card.getAttribute('data-search-terms') || '').toLowerCase();
 
-          const matchCat = (activeCategory === 'all' || cat === activeCategory);
-          const matchQuery = !q || title.includes(q) || desc.includes(q) || kw.includes(q);
+          const matchesCategory = (currentCategory === 'all' || group === currentCategory);
+          const matchesQuery = !q || title.includes(q) || desc.includes(q) || terms.includes(q);
 
-          if (matchCat && matchQuery) {
+          if (matchesCategory && matchesQuery) {
             card.style.display = 'flex';
-            visible++;
+            count++;
           } else {
             card.style.display = 'none';
           }
         });
 
-        if (visible === 0) {
-          emptyState.classList.add('show');
+        if (count === 0) {
+          emptyStateBox.classList.add('show');
         } else {
-          emptyState.classList.remove('show');
+          emptyStateBox.classList.remove('show');
         }
 
-        counter.innerText = `${visible} Aplikasi Siap Digunakan`;
+        badgeTotal.innerText = `${count} Layanan Siap Digunakan`;
       }
 
       searchInput.addEventListener('input', (e) => {
-        activeQuery = e.target.value;
-        searchClear.style.display = activeQuery ? 'flex' : 'none';
-        updateCatalog();
+        searchQuery = e.target.value;
+        clearSearchBtn.style.display = searchQuery ? 'flex' : 'none';
+        filterServices();
       });
 
-      searchClear.addEventListener('click', () => {
+      clearSearchBtn.addEventListener('click', () => {
         searchInput.value = '';
-        activeQuery = '';
-        searchClear.style.display = 'none';
+        searchQuery = '';
+        clearSearchBtn.style.display = 'none';
         searchInput.focus();
-        updateCatalog();
+        filterServices();
       });
 
-      // Keyboard shortcut '/' to jump to search
+      // Keyboard shortcut '/' to jump to search input
       document.addEventListener('keydown', (e) => {
         if (e.key === '/' && document.activeElement !== searchInput) {
           e.preventDefault();
@@ -1733,12 +1684,12 @@
         }
       });
 
-      chips.forEach(chip => {
+      filterChips.forEach(chip => {
         chip.addEventListener('click', () => {
-          chips.forEach(c => c.classList.remove('active'));
+          filterChips.forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
-          activeCategory = chip.getAttribute('data-category') || 'all';
-          updateCatalog();
+          currentCategory = chip.getAttribute('data-filter') || 'all';
+          filterServices();
         });
       });
     })();

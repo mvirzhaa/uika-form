@@ -1,6 +1,6 @@
 /* MODE EDITOR — hanya untuk pembuat formulir dan email yang ia daftarkan (dijaga di server). */
 import { h, clear, icon, api, ApiError, session, navbar, userMenu, link, navigate, toast, modal, confirmDialog, debounce, uuid, applyTheme, heroClass, heroStyle, luminance,
-  loginUrl, copyText, fillUrl, errMsg, fmtDateTime, num, logo, prefButtons } from '../core.js';
+  loginUrl, copyText, fillUrl, errMsg, fmtDateTime, num, logo, prefButtons, urlWithBase } from '../core.js';
 import { responsesTab } from './results.js';
 import { editListDialog } from './lists.js';
 import * as P from './editor-parts.js';
@@ -385,7 +385,7 @@ export async function editorPage(root, { id }, query) {
       title: 'Impor soal dari Excel', wide: false,
       body: h('div', { class: 'col' },
         h('p', { class: 'muted small', style: { margin: 0 } }, 'Satu baris = satu pertanyaan. Tipe: jawaban singkat, esai, pilihan ganda, kotak centang, dropdown, skala, tanggal, waktu, judul bagian. Kunci jawaban & poin untuk kuis.'),
-        h('div', { class: 'row wrap' }, h('a', { class: 'btn sm', href: '/api/templates/survey.xlsx', download: '' }, icon('download', 16), 'Template formulir'), h('a', { class: 'btn sm', href: '/api/templates/quiz.xlsx', download: '' }, icon('download', 16), 'Template kuis')),
+        h('div', { class: 'row wrap' }, h('a', { class: 'btn sm', href: urlWithBase('/api/templates/survey.xlsx'), download: '' }, icon('download', 16), 'Template formulir'), h('a', { class: 'btn sm', href: urlWithBase('/api/templates/quiz.xlsx'), download: '' }, icon('download', 16), 'Template kuis')),
         h('div', null, h('label', { class: 'f' }, 'Berkas .xlsx'), file), h('div', null, h('label', { class: 'f' }, 'Mode'), mode), out),
       actions: [{ label: 'Tutup' }, { label: 'Impor', kind: 'primary', onClick: async () => {
         if (!file.files[0]) { toast('Pilih berkas Excel dulu', 'err'); return false; }

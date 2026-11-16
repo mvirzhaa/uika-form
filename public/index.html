@@ -6,12 +6,19 @@
   <meta name="theme-color" content="#f2f2f7">
   <title>UIKA Form</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230071e3'/%3E%3Cpath d='M18 22h28M18 32h28M18 42h16' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    if (window.location.pathname.startsWith('/u-form')) {
+      const b = document.createElement('base');
+      b.href = '/u-form/';
+      document.head.prepend(b);
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div id="app"></div>
   <div id="toasts" aria-live="polite"></div>
   <noscript>UIKA Form membutuhkan JavaScript.</noscript>
-  <script type="module" src="/js/main.js?v=6"></script>
+  <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

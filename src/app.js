@@ -92,8 +92,9 @@ function createApp() {
 
         auth.setSession(res, await auth.signSession(user.id));
 
-        // Bersihkan token dari URL di address bar
-        const cleanUrl = req.path || '/';
+        // Bersihkan token dari URL di address bar (mendukung subpath bila ada)
+        const prefix = req.headers['x-forwarded-prefix'] || '';
+        const cleanUrl = (prefix ? prefix.replace(/\/+$/, '') : '') + (req.path || '/');
         return res.redirect(cleanUrl);
       } catch (err) {
         console.error('[sso] Login SSO gagal:', err.message);

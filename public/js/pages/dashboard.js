@@ -1,4 +1,4 @@
-import { h, clear, icon, api, session, navbar, userMenu, link, navigate, toast, modal, confirmDialog, copyText, fillUrl, fmtDateTime, errMsg, loginUrl, logo } from '../core.js';
+import { h, clear, icon, api, session, navbar, userMenu, link, navigate, toast, modal, confirmDialog, copyText, fillUrl, fmtDateTime, errMsg, loginUrl, logo, urlWithBase } from '../core.js';
 
 const STATUS = { draft: ['Draf', ''], published: ['Dibuka', 'ok'], closed: ['Ditutup', 'bad'] };
 
@@ -18,7 +18,7 @@ export async function dashboardPage(root) {
   };
   const head = h('div', { class: 'row wrap', style: { marginBottom: '18px' } },
     h('div', { class: 'grow' }, h('h1', { style: { fontSize: '32px' } }, 'Formulir saya'), h('p', { class: 'muted', style: { margin: '4px 0 0' } }, 'Survei, pendaftaran kegiatan, dan kuis dengan sertifikat otomatis')),
-    h('a', { class: 'btn', href: '/api/templates/survey.xlsx', download: '' }, icon('download'), 'Template Excel'),
+    h('a', { class: 'btn', href: urlWithBase('/api/templates/survey.xlsx'), download: '' }, icon('download'), 'Template Excel'),
     canCreate && h('button', { class: 'btn', onclick: () => create('quiz') }, icon('clock'), 'Kuis baru'),
     canCreate && h('button', { class: 'btn primary', onclick: () => create('form') }, icon('plus'), 'Formulir baru'));
   clear(page); page.append(head);

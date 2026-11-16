@@ -71,6 +71,15 @@ export function icon(name, size) {
 }
 export const logo = () => h('span', { class: 'logo' }, icon('list'));
 
+/* ---------- subpath helper (/u-form) ---------- */
+export const basePath = () => (location.pathname.startsWith('/u-form') ? '/u-form' : '');
+export const urlWithBase = (path) => {
+  const b = basePath();
+  if (!b) return path;
+  if (path.startsWith(b + '/') || path === b) return path;
+  return path.startsWith('/') ? `${b}${path}` : `${b}/${path}`;
+};
+
 /* ---------- API ---------- */
 export class ApiError extends Error {
   constructor(status, data) { super((data && (data.message || data.error)) || `HTTP ${status}`); this.status = status; this.data = data || {}; }
@@ -81,7 +90,7 @@ export async function api(method, path, body, opts = {}) {
   if (opts.raw) { init.body = opts.raw; init.headers['content-type'] = opts.contentType || 'application/octet-stream'; }
   else if (body !== undefined) { init.body = JSON.stringify(body); init.headers['content-type'] = 'application/json'; }
   let r;
-  try { r = await fetch(path, init); } catch { throw new ApiError(0, { message: 'Tidak dapat terhubung ke server' }); }
+  try { r = await fetch(urlWithBase(path), init); } catch { throw new ApiError(0, { message: 'Tidak dapat terhubung ke server' }); }
   const ct = r.headers.get('content-type') || '';
   const data = ct.includes('json') ? await r.json().catch(() => ({})) : null;
   if (!r.ok) throw new ApiError(r.status, data);
@@ -95,7 +104,7 @@ export async function loadSession() {
 }
 export const loginUrl = (next = location.pathname + location.search) => {
   if (session.eportal_url) return session.eportal_url;
-  return `/auth/login?next=${encodeURIComponent(next)}`;
+  return urlWithBase(`/auth/login?next=${encodeURIComponent(next)}`);
 };
 
 /* ---------- router ---------- */
@@ -109,7 +118,11 @@ export function route(pattern, handler) {
 export async function render() {
   if (typeof cleanup === 'function') { try { cleanup(); } catch { /* abaikan */ } cleanup = null; }
   const root = $('#app');
-  const path = location.pathname;
+  let path = location.pathname;
+  const b = basePath();
+  if (b && (path.startsWith(b + '/') || path === b)) {
+    path = path.slice(b.length) || '/';
+  }
   const query = Object.fromEntries(new URLSearchParams(location.search));
   for (const r of routes) {
     const m = path.match(r.re);
@@ -123,26 +136,32 @@ export async function render() {
     try { cleanup = await r.handler(root, params, query); } catch (e) { clear(root); root.append(errorScreen(e)); console.error(e); }
     return;
   }
-  clear(root); root.append(h('div', { class: 'center-screen' }, h('div', null, h('h1', null, '404'), h('p', { class: 'muted' }, 'Halaman tidak ditemukan'), h('a', { class: 'btn primary', href: '/', 'data-link': '' }, 'Ke beranda'))));
+  clear(root); root.append(h('div', { class: 'center-screen' }, h('div', null, h('h1', null, '404'), h('p', { class: 'muted' }, 'Halaman tidak ditemukan'), h('a', { class: 'btn primary', href: urlWithBase('/'), 'data-link': '' }, 'Ke beranda'))));
 }
 export function navigate(path, replace = false) {
-  if (replace) history.replaceState({}, '', path); else history.pushState({}, '', path);
+  const full = urlWithBase(path);
+  if (replace) history.replaceState({}, '', full); else history.pushState({}, '', full);
   return render();
 }
-export const link = (href, props, ...kids) => h('a', { ...props, href, 'data-link': '' }, ...kids);
+export const link = (href, props, ...kids) => h('a', { ...props, href: urlWithBase(href), 'data-link': '' }, ...kids);
 export function startRouter() {
   document.addEventListener('click', (e) => {
     const a = e.target.closest && e.target.closest('a[data-link]');
     if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === '_blank') return;
     e.preventDefault();
-    navigate(a.getAttribute('href'));
+    let href = a.getAttribute('href');
+    const b = basePath();
+    if (b && (href.startsWith(b + '/') || href === b)) {
+      href = href.slice(b.length) || '/';
+    }
+    navigate(href);
   });
   window.addEventListener('popstate', render);
   return render();
 }
 export function errorScreen(e) {
   const msg = e instanceof ApiError && e.status === 404 ? 'Halaman atau formulir tidak ditemukan, atau Anda tidak memiliki akses.' : (e.message || 'Terjadi kesalahan');
-  return h('div', { class: 'center-screen' }, h('div', null, h('div', { class: 'big' }, '⚠️'), h('h2', null, 'Tidak dapat dibuka'), h('p', { class: 'muted' }, msg), h('a', { class: 'btn primary', href: '/', 'data-link': '' }, 'Ke beranda')));
+  return h('div', { class: 'center-screen' }, h('div', null, h('div', { class: 'big' }, '⚠️'), h('h2', null, 'Tidak dapat dibuka'), h('p', { class: 'muted' }, msg), h('a', { class: 'btn primary', href: urlWithBase('/'), 'data-link': '' }, 'Ke beranda')));
 }
 
 /* ---------- toast & modal ---------- */
@@ -231,7 +250,7 @@ export function heroClass(theme) {
   const light = luminance(theme.color) > 0.6 && theme.header_style !== 'image';
   return `hero ${theme.header_style === 'image' && theme.header_image ? 'image' : theme.header_style === 'solid' ? '' : 'gradient'}${light ? ' light-on' : ''}`;
 }
-export const heroStyle = (theme) => (theme.header_style === 'image' && theme.header_image ? { backgroundImage: `url(/uploads/${theme.header_image})`, color: '#fff' } : {});
+export const heroStyle = (theme) => (theme.header_style === 'image' && theme.header_image ? { backgroundImage: `url(${urlWithBase(`/uploads/${theme.header_image}`)})`, color: '#fff' } : {});
 
 /* Muat Chart.js sekali saja (disajikan dari server sendiri) */
 let chartPromise = null;
@@ -239,7 +258,7 @@ export function loadChart() {
   if (window.Chart) return Promise.resolve(window.Chart);
   if (!chartPromise) {
     chartPromise = new Promise((res, rej) => {
-      const s = document.createElement('script'); s.src = '/vendor/chart.js'; s.onload = () => res(window.Chart); s.onerror = () => rej(new Error('Chart.js gagal dimuat')); document.head.append(s);
+      const s = document.createElement('script'); s.src = urlWithBase('/vendor/chart.js'); s.onload = () => res(window.Chart); s.onerror = () => rej(new Error('Chart.js gagal dimuat')); document.head.append(s);
     });
   }
   return chartPromise;
@@ -285,18 +304,18 @@ applyThemePref();
 export function userMenu({ compact = false } = {}) {
   const u = session.user;
   if (!u) return h('a', { class: 'btn primary sm', href: loginUrl() }, 'Masuk');
-  if (compact) return h('a', { class: 'btn icon', title: `Keluar (${u.email})`, href: '/auth/logout', onclick: (e) => { e.preventDefault(); logoutNow(); } }, icon('logout'));
+  if (compact) return h('a', { class: 'btn icon', title: `Keluar (${u.email})`, href: urlWithBase('/auth/logout'), onclick: (e) => { e.preventDefault(); logoutNow(); } }, icon('logout'));
   return h('div', { class: 'row' },
     session.user.role !== 'user' && link('/lists', { class: 'btn sm ghost hide-sm' }, 'Daftar pilihan'),
     session.user.role !== 'user' && link('/banks', { class: 'btn sm ghost hide-sm' }, 'Bank soal'),
     session.user.role === 'admin' && link('/admin', { class: 'btn sm ghost hide-sm' }, 'Admin'),
     h('span', { class: 'small muted hide-sm', title: u.email }, u.name || u.email),
-    h('a', { class: 'btn icon hide-sm', title: 'Keluar', href: '/auth/logout', onclick: (e) => { e.preventDefault(); logoutNow(); } }, icon('logout')),
+    h('a', { class: 'btn icon hide-sm', title: 'Keluar', href: urlWithBase('/auth/logout'), onclick: (e) => { e.preventDefault(); logoutNow(); } }, icon('logout')),
     h('button', { class: 'btn icon show-sm', title: 'Menu', 'aria-label': 'Menu', onclick: () => navMenu() }, icon('more')));
 }
 export function logoutNow() {
   document.cookie = 'uf_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
-  window.location.href = '/auth/logout';
+  window.location.href = urlWithBase('/auth/logout');
 }
 /** Menu navigasi untuk HP (tautan yang disembunyikan di bilah atas layar kecil). */
 export function navMenu(extra = []) {

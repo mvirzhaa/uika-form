@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#00602f">
   <title>Portal Layanan &amp; Utilitas Digital — Universitas Ibn Khaldun Bogor</title>
-  <meta name="description" content="Pusat layanan digital dan utilitas akademik resmi Universitas Ibn Khaldun Bogor (UIKA): UIKA Form, OlahPDF, Presensi, Detektor Teks AI, dan Perancang Denah 2D/3D.">
+  <meta name="description" content="Pusat layanan digital dan utilitas akademik resmi Universitas Ibn Khaldun Bogor (UIKA): UIKA Form, OlahPDF, Presensi, Detektor Teks AI, Perancang Denah 2D/3D, dan Simulator Drone FPV.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2300602f'/%3E%3Cpath d='M32 8L12 18v18c0 12 8.5 23 20 26 11.5-3 20-14 20-26V18L32 8z' fill='%2300733c' stroke='%23fbbf24' stroke-width='2.5'/%3E%3Cpath d='M22 34c0-5 4.5-9 10-9s10 4 10 9' stroke='%23ffffff' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='22' r='3.5' fill='%23fbbf24'/%3E%3C/svg%3E">
 
   <!-- Official Google Fonts: Plus Jakarta Sans (Modern Institutional Academic Font) -->
@@ -1134,7 +1134,7 @@
       <div class="filter-group">
         <button class="chip-btn active" data-filter="all">
           <span>Semua Layanan</span>
-          <span class="chip-counter">5</span>
+          <span class="chip-counter">6</span>
         </button>
         <button class="chip-btn" data-filter="survey">
           <span>Survei &amp; Formulir</span>
@@ -1156,6 +1156,10 @@
           <span>Desain &amp; Denah</span>
           <span class="chip-counter">1</span>
         </button>
+        <button class="chip-btn" data-filter="simulation">
+          <span>Simulasi &amp; Drone</span>
+          <span class="chip-counter">1</span>
+        </button>
       </div>
     </div>
   </section>
@@ -1174,7 +1178,7 @@
         </svg>
         <span>Katalog Layanan Digital</span>
       </div>
-      <div class="catalog-badge-total" id="badgeTotalServices">5 Layanan Siap Digunakan</div>
+      <div class="catalog-badge-total" id="badgeTotalServices">6 Layanan Siap Digunakan</div>
     </div>
 
     <div class="cards-layout" id="cardsContainer">
@@ -1477,6 +1481,71 @@
         </div>
       </article>
 
+      <!-- ==========================================
+           6. U-DRONE (SIMULATOR FPV 3D)
+           ========================================== -->
+      <article class="service-card"
+               data-filter-group="simulation"
+               data-search-terms="udrone u-drone drone fpv simulator simulasi 3d balap race freestyle threejs webgl acro angle betaflight radio otg joystick pilot terbang game"
+               style="--card-accent: #7c3aed; --card-btn: #6d28d9;">
+        <div>
+          <div class="card-head">
+            <div class="service-icon-box" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <line x1="9.5" y1="9.5" x2="5" y2="5"/>
+                <line x1="14.5" y1="9.5" x2="19" y2="5"/>
+                <line x1="9.5" y1="14.5" x2="5" y2="19"/>
+                <line x1="14.5" y1="14.5" x2="19" y2="19"/>
+                <circle cx="5" cy="5" r="2.5"/>
+                <circle cx="19" cy="5" r="2.5"/>
+                <circle cx="5" cy="19" r="2.5"/>
+                <circle cx="19" cy="19" r="2.5"/>
+              </svg>
+            </div>
+            <div class="card-tag-group">
+              <span class="badge-online">
+                <span class="dot-green"></span>
+                <span>Aktif</span>
+              </span>
+              <span class="badge-category">Simulasi 3D &amp; FPV</span>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <h2 class="service-name">U-Drone (Simulator FPV 3D)</h2>
+            <p class="service-summary">
+              Simulator balap dan freestyle drone FPV 3D berbasis Three.js &amp; WebGL. Menghadirkan fisika penerbangan realistis 400 Hz, 7 varian drone, 6 peta sirkuit, mode balap &amp; ghost, serta dukungan stik layar sentuh, gamepad, dan radio kontroler OTG.
+            </p>
+            <ul class="checklist">
+              <li class="checklist-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Fisika realistis 400 Hz: kurva Betaflight, mode Acro &amp; Angle</span>
+              </li>
+              <li class="checklist-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>6 peta sirkuit (Stadion, Pegunungan, Pantai) &amp; 7 spesifikasi drone</span>
+              </li>
+              <li class="checklist-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Multi-kontroler: radio transmitter USB OTG, gamepad, &amp; sentuh</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-foot">
+          <span class="path-indicator">/u-drone/</span>
+          <a href="/u-drone/" class="btn-open-app" title="Buka U-Drone Simulator 3D">
+            <span>Buka Layanan</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
       <!-- Empty Filter/Search State -->
       <div id="searchEmptyNotice" class="empty-search-box">
         <div class="empty-search-icon">🔍</div>
@@ -1575,6 +1644,7 @@
             <li><a href="/presensi">Presensi App</a></li>
             <li><a href="/detector-text/">Detektor Teks AI</a></li>
             <li><a href="/architect/">Architect 2D/3D</a></li>
+            <li><a href="/u-drone/">U-Drone Simulator 3D</a></li>
           </ul>
         </div>
       </div>

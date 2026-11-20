@@ -1,6 +1,6 @@
 /* Admin › Formulir: tabel semua formulir dari semua pembuat, pencarian kata kunci (pertanyaan/judul/pembuat),
    detail isi lengkap, ekspor respons, dan hapus (satu atau banyak). */
-import { h, clear, icon, api, toast, modal, confirmDialog, errMsg, fmtDateTime, debounce, num } from '../core.js';
+import { h, clear, icon, api, toast, modal, confirmDialog, errMsg, fmtDateTime, debounce, num, urlWithBase } from '../core.js';
 
 const TYPE_LABEL = { short: 'Jawaban singkat', paragraph: 'Esai', radio: 'Pilihan ganda', checkbox: 'Kotak centang', dropdown: 'Dropdown', scale: 'Skala', date: 'Tanggal', time: 'Waktu', grid: 'Kisi', ranking: 'Peringkat', file: 'Unggah berkas', section: 'Judul bagian' };
 const STATUS = { draft: ['Draf', ''], published: ['Dibuka', 'ok'], closed: ['Ditutup', 'bad'] };
@@ -144,8 +144,8 @@ export function adminFormsPane() {
           S.is_quiz && info('Durasi', S.duration_min ? `${S.duration_min} menit` : 'Tanpa batas'), S.is_quiz && info('Anti-curang', S.anticheat.enabled ? `Aktif (maks. ${S.anticheat.max_violations})` : 'Tidak')),
         d.editors.length > 0 && h('div', { class: 'small' }, h('b', null, 'Editor tambahan: '), h('span', { translate: 'no' }, d.editors.map((e) => e.email).join(', '))),
         h('div', { class: 'row wrap' },
-          h('a', { class: 'btn sm', href: `/f/${d.slug}`, target: '_blank', rel: 'noopener' }, icon('ext', 14), 'Buka halaman pengisian'),
-          h('a', { class: 'btn sm', href: `/api/admin/forms/${d.id}/export.xlsx` }, icon('download', 14), 'Unduh respons (Excel)')),
+          h('a', { class: 'btn sm', href: urlWithBase(`/f/${d.slug}`), target: '_blank', rel: 'noopener' }, icon('ext', 14), 'Buka halaman pengisian'),
+          h('a', { class: 'btn sm', href: urlWithBase(`/api/admin/forms/${d.id}/export.xlsx`) }, icon('download', 14), 'Unduh respons (Excel)')),
         h('h3', { style: { margin: '6px 0 0' } }, `Pertanyaan (${n})`),
         d.questions.length ? h('div', { class: 'af-qlist' }, qEls) : h('p', { class: 'small muted' }, 'Belum ada pertanyaan.')),
       actions: [

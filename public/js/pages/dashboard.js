@@ -47,7 +47,7 @@ export async function dashboardPage(root) {
         h('div', { class: 'tiny muted', style: { marginTop: '8px' } }, `Diubah ${fmtDateTime(f.updated_at)}${f.role === 'editor' ? ` · pemilik: ${f.owner_name || f.owner_email}` : ''}`)),
       h('div', { class: 'foot' },
         h('button', { class: 'btn icon ghost', title: 'Salin tautan pengisian', onclick: () => copyText(fillUrl(f.slug)) }, icon('link')),
-        h('button', { class: 'btn icon ghost', title: 'Buka Mode Pengisian', onclick: () => window.open(`/f/${f.slug}${f.status === 'published' ? '' : '?preview=1'}`, '_blank') }, icon('eye')),
+        h('button', { class: 'btn icon ghost', title: 'Buka Mode Pengisian', onclick: () => window.open(urlWithBase(`/f/${f.slug}${f.status === 'published' ? '' : '?preview=1'}`), '_blank') }, icon('eye')),
         h('button', { class: 'btn icon ghost', title: 'Gandakan', onclick: async () => { try { const c = await api('POST', `/api/forms/${f.id}/duplicate`); navigate(`/forms/${c.id}/edit`); } catch (e) { toast(errMsg(e), 'err'); } } }, icon('copy')),
         h('span', { class: 'spacer' }),
         f.role === 'owner' && h('button', { class: 'btn icon ghost', title: 'Hapus', style: { color: 'var(--danger)' }, onclick: async () => {

@@ -1,6 +1,6 @@
 /* Desain sertifikat visual: pratinjau A4 dengan elemen yang bisa diklik & digeser, panel properti di kanan.
    Satuan mengikuti src/certLayout.js: x/width/size = % lebar halaman, y = % tinggi halaman. */
-import { h, clear, icon, api, toast, confirmDialog, errMsg } from '../core.js';
+import { h, clear, icon, api, toast, confirmDialog, errMsg, urlWithBase } from '../core.js';
 
 const PW = 841.89; const PH = 595.28;
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
@@ -255,7 +255,7 @@ export async function openCertDesigner(c, { onClose } = {}) {
 
     side.append(h('div', { class: 'cd-foot' },
       h('button', { class: 'btn sm', type: 'button', onclick: async () => { if (!C.layout) { toast('Tata letak sudah bawaan templat'); return; } if (!await confirmDialog('Atur ulang tata letak?', 'Semua posisi & ukuran elemen kembali ke bawaan templat.', 'Atur ulang')) return; C.layout = null; lay = resolved(); c.touch(); paintPage(); paintSide(); } }, icon('refresh', 14), 'Atur ulang'),
-      h('button', { class: 'btn sm', type: 'button', onclick: async () => { await c.flush(); window.open(`/api/forms/${form.id}/certificate-preview.pdf?t=${Date.now()}`, '_blank', 'noopener'); } }, icon('eye', 14), 'Pratinjau PDF'),
+      h('button', { class: 'btn sm', type: 'button', onclick: async () => { await c.flush(); window.open(urlWithBase(`/api/forms/${form.id}/certificate-preview.pdf?t=${Date.now()}`), '_blank', 'noopener'); } }, icon('eye', 14), 'Pratinjau PDF'),
       h('span', { class: 'spacer' }), h('button', { class: 'btn sm primary', type: 'button', onclick: close }, 'Selesai')));
   }
 

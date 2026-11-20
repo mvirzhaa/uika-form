@@ -1,4 +1,5 @@
 'use strict';
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
@@ -187,20 +188,40 @@ small{color:#b45309}</style>
     return res.redirect(302, `${base}/f/${r.rows[0].slug}${qs}`);
   });
 
+  const indexHtmlPath = path.join(__dirname, '..', 'public', 'index.html');
+  function sendAppHtml(req, res) {
+    const rawHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+    let prefix = req.headers['x-forwarded-prefix'];
+    if (!prefix && (req.originalUrl || '').startsWith('/u-form')) {
+      prefix = '/u-form';
+    }
+    const baseHref = prefix ? `${prefix.replace(/\/+$/, '')}/` : (config.BASE_URL && config.BASE_URL.includes('/u-form') ? '/u-form/' : '/');
+    let html = rawHtml;
+    if (html.includes('<base ')) {
+      html = html.replace(/<base\s+href="[^"]*">/i, `<base href="${baseHref}">`);
+    } else {
+      html = html.replace('<head>', `<head>\n  <base href="${baseHref}">`);
+    }
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.send(html);
+  }
+
   // Halaman pengisian boleh disematkan (iframe) hanya bila pembuat mengizinkannya
   const CSP = (ancestors) => ["default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'", "img-src 'self' data: blob:", "font-src 'self' data:", "connect-src 'self'", "frame-src 'self'", "object-src 'self'", "base-uri 'self'", "form-action 'self'", `frame-ancestors ${ancestors}`].join('; ');
   app.get('/f/:slug', async (req, res, next) => {
+    const slug = String(req.params.slug || '').toLowerCase();
+    if (!/^[a-z0-9][a-z0-9-]{2,39}$/.test(slug)) {
+      return next();
+    }
     try {
-      const slug = String(req.params.slug || '').toLowerCase();
-      if (/^[a-z0-9][a-z0-9-]{2,39}$/.test(slug)) {
-        const r = await q('SELECT settings FROM forms WHERE slug=$1 OR lower(alias)=$1 LIMIT 1', [slug]);
-        if (r.rowCount && schema.cleanSettings(r.rows[0].settings).allow_embed) {
-          res.setHeader('Content-Security-Policy', CSP('*'));
-          res.removeHeader('X-Frame-Options');
-        }
+      const r = await q('SELECT settings FROM forms WHERE slug=$1 OR lower(alias)=$1 LIMIT 1', [slug]);
+      if (r.rowCount && schema.cleanSettings(r.rows[0].settings).allow_embed) {
+        res.setHeader('Content-Security-Policy', CSP('*'));
+        res.removeHeader('X-Frame-Options');
       }
     } catch { /* abaikan: pakai header bawaan */ }
-    return res.sendFile(path.join(__dirname, '..', 'public', 'index.html'), (e) => { if (e) next(e); });
+    return sendAppHtml(req, res);
   });
 
   /* ---------- berkas statis + SPA ---------- */
@@ -214,9 +235,8 @@ small{color:#b45309}</style>
       }
     },
   }));
-  app.get(/^\/(?!api\/|auth\/|uploads\/|vendor\/).*/, (_req, res) => {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+  app.get(/^\/(?!api\/|auth\/|uploads\/|vendor\/).*/, (req, res) => {
+    return sendAppHtml(req, res);
   });
 
   // eslint-disable-next-line no-unused-vars

@@ -23,17 +23,18 @@ DECLARE
   v_owner uuid;
   v_form  uuid := $q$757f0272-8371-5d83-936a-c24a03c86fed$q$::uuid;
   v_email text := (SELECT owner_email FROM _seed_cfg);
+  v_actual_email text;
 BEGIN
-  SELECT id INTO v_owner FROM users WHERE lower(email) = lower(v_email);
+  SELECT id, email INTO v_owner, v_actual_email FROM users WHERE lower(email) = lower(v_email);
   IF v_owner IS NULL THEN
     -- Fallback: gunakan akun admin pertama atau akun terdaftar pertama di database
-    SELECT id INTO v_owner FROM users ORDER BY (role = 'admin') DESC, id ASC LIMIT 1;
+    SELECT id, email INTO v_owner, v_actual_email FROM users ORDER BY (role = 'admin') DESC, id ASC LIMIT 1;
     IF v_owner IS NOT NULL THEN
-      RAISE NOTICE 'owner_email (%) tidak ditemukan, otomatis memakai akun terdaftar: %', v_email, (SELECT email FROM users WHERE id = v_owner);
+      RAISE NOTICE 'owner_email (%) tidak ditemukan, otomatis memakai akun: %', v_email, v_actual_email;
     END IF;
   END IF;
   IF v_owner IS NULL THEN
-    RAISE EXCEPTION 'Belum ada pengguna terdaftar di tabel users. Silakan login ke UIKA Form sekali terlebih dahulu.', v_email;
+    RAISE EXCEPTION 'Belum ada pengguna terdaftar di tabel users. Silakan login ke UIKA Form sekali terlebih dahulu.';
   END IF;
 
   IF EXISTS (SELECT 1 FROM forms WHERE slug = $q$kuesioner-dosen-esai$q$ OR id = v_form) THEN
@@ -66,7 +67,7 @@ BEGIN
     ($q$9262e31a-d289-51cd-945f-bf0809a4e71a$q$::uuid, v_form, 17, $q$paragraph$q$, $q$C1. Kendala apa yang paling sering Bapak/Ibu hadapi saat mengoreksi ujian esai dari beberapa kelas?$q$, $q$$q$, false, $q$[]$q$::jsonb, $q$[]$q$::jsonb, 0, $q${}$q$::jsonb),
     ($q$cc06da56-2921-50f8-95f7-377c9543632f$q$::uuid, v_form, 18, $q$paragraph$q$, $q$C2. Apa syarat atau harapan Bapak/Ibu jika penilaian esai dibantu oleh sistem otomatis (AI)?$q$, $q$$q$, false, $q$[]$q$::jsonb, $q$[]$q$::jsonb, 0, $q${}$q$::jsonb);
 
-  RAISE NOTICE 'Form "%" dibuat untuk % (%). Tautan: /s/kuesioner-dosen-esai', $q$Kuesioner Pra-Penelitian untuk Dosen: Ko…$q$, v_email, $q$15 pertanyaan + 4 judul bagian$q$;
+  RAISE NOTICE 'Form "%" dibuat untuk % (%). Tautan: /s/kuesioner-dosen-esai', $q$Kuesioner Pra-Penelitian untuk Dosen$q$, v_actual_email, $q$15 pertanyaan + 4 bagian$q$;
 END
 $seed$;
 

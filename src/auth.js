@@ -20,9 +20,10 @@ async function signSession(uid) {
   return new SignJWT({ uid }).setProtectedHeader({ alg: 'HS256' }).setIssuedAt().setExpirationTime('7d').sign(secretKey);
 }
 
-function setSession(res, token) {
+function setSession(res, token, req) {
+  const isHttps = (req && (req.secure || req.headers['x-forwarded-proto'] === 'https')) || config.COOKIE_SECURE;
   res.cookie(COOKIE, token, {
-    httpOnly: true, sameSite: 'lax', secure: config.COOKIE_SECURE, maxAge: 7 * 24 * 3600 * 1000, path: '/',
+    httpOnly: true, sameSite: 'lax', secure: isHttps, maxAge: 7 * 24 * 3600 * 1000, path: '/',
   });
 }
 
@@ -34,8 +35,14 @@ async function loadUser(req, _res, next) {
     try {
       const { payload } = await jwtVerify(t, secretKey, { algorithms: ['HS256'] });
       const r = await q('SELECT id, email, name, identifier, role FROM users WHERE id=$1', [payload.uid]);
-      if (r.rowCount) req.user = r.rows[0];
-    } catch { /* sesi tidak valid */ }
+      if (r.rowCount) {
+        req.user = r.rows[0];
+      } else {
+        console.warn('[auth] Sesi user id tidak ditemukan di DB:', payload.uid);
+      }
+    } catch (err) {
+      console.warn('[auth] Verifikasi cookie sesi gagal:', err.message);
+    }
   }
   next();
 }
@@ -67,7 +74,7 @@ async function upsertUser({ sub, email, name, identifier, role }) {
        SET sub = COALESCE(EXCLUDED.sub, users.sub),
            name = CASE WHEN EXCLUDED.name <> '' THEN EXCLUDED.name ELSE users.name END,
            identifier = CASE WHEN EXCLUDED.identifier <> '' THEN EXCLUDED.identifier ELSE users.identifier END,
-           role = EXCLUDED.role,
+           role = CASE WHEN users.role = 'admin' THEN 'admin' ELSE EXCLUDED.role END,
            last_login = now()
      RETURNING id, email, name, identifier, role`,
     [sub || null, email, String(name || '').slice(0, 200), String(identifier || '').slice(0, 60), targetRole],

@@ -90,10 +90,11 @@ function createApp() {
           role: assignedRole,
         });
 
-        auth.setSession(res, await auth.signSession(user.id));
+        auth.setSession(res, await auth.signSession(user.id), req);
+        console.log(`[sso] Login SSO berhasil: ${user.email} (id: ${user.id}, role: ${user.role})`);
 
-        // Bersihkan token dari URL di address bar (mendukung subpath bila ada)
-        const prefix = req.headers['x-forwarded-prefix'] || '';
+        // Bersihkan token dari URL di address bar (mendukung subpath /u-form bila ada)
+        const prefix = req.headers['x-forwarded-prefix'] || '/u-form';
         const cleanUrl = (prefix ? prefix.replace(/\/+$/, '') : '') + (req.path || '/');
         return res.redirect(cleanUrl);
       } catch (err) {

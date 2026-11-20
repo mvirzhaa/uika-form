@@ -177,12 +177,14 @@ small{color:#b45309}</style>
 
   // Tautan pendek: /s/<alias atau kode> → halaman pengisian
   app.get('/s/:code', async (req, res) => {
+    const prefix = req.headers['x-forwarded-prefix'] || '/u-form';
+    const base = prefix.replace(/\/+$/, '');
     const code = String(req.params.code || '').toLowerCase();
-    if (!/^[a-z0-9][a-z0-9-]{2,39}$/.test(code)) return res.redirect(302, '/');
+    if (!/^[a-z0-9][a-z0-9-]{2,39}$/.test(code)) return res.redirect(302, `${base}/`);
     const r = await q('SELECT slug FROM forms WHERE slug=$1 OR lower(alias)=$1 ORDER BY (slug=$1) DESC LIMIT 1', [code]);
-    if (!r.rowCount) return res.redirect(302, '/');
+    if (!r.rowCount) return res.redirect(302, `${base}/`);
     const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-    return res.redirect(302, `/f/${r.rows[0].slug}${qs}`);
+    return res.redirect(302, `${base}/f/${r.rows[0].slug}${qs}`);
   });
 
   // Halaman pengisian boleh disematkan (iframe) hanya bila pembuat mengizinkannya

@@ -1,6 +1,6 @@
 /* Bagian-bagian Editor untuk fitur lanjutan: percabangan, tipe soal baru, daftar peserta, absensi,
    bank soal, tautan/QR/embed, nomor & kirim massal sertifikat. Semua menerima `c` (konteks editor). */
-import { h, clear, icon, api, session, toast, modal, confirmDialog, uuid, errMsg, fmtDateTime, copyText, debounce } from '../core.js';
+import { h, clear, icon, api, session, toast, modal, confirmDialog, uuid, errMsg, fmtDateTime, copyText, debounce, urlWithBase } from '../core.js';
 import { OP_LABEL } from '../logic.js';
 
 const optId = () => `o${Math.random().toString(36).slice(2, 8)}`;
@@ -234,13 +234,13 @@ export function attendanceCard(c) {
 /* ================= tautan pendek, QR, embed (modal Bagikan) ================= */
 export function shareExtras(c, fillUrl) {
   const f = c.form; const wrap = h('div', { class: 'subbox' });
-  const shortUrl = () => `${location.origin}/s/${f.alias || f.slug}`;
+  const shortUrl = () => `${location.origin}${urlWithBase('/s/' + (f.alias || f.slug))}`;
   const draw = () => {
     clear(wrap);
     const alias = h('input', { class: 'in', value: f.alias || '', placeholder: 'mis. kuis-pbo-2026', maxlength: 40, style: { flex: '1 1 150px', minWidth: '0' } });
     const msg = h('div', { class: 'tiny', style: { minHeight: '16px', marginTop: '4px' } });
     wrap.append(h('h4', null, 'Tautan pendek'),
-      h('div', { class: 'row wrap' }, h('span', { class: 'small muted', style: { whiteSpace: 'nowrap' } }, `${location.host}/s/`), alias,
+      h('div', { class: 'row wrap' }, h('span', { class: 'small muted', style: { whiteSpace: 'nowrap' } }, `${location.host}${urlWithBase('/s/')}`), alias,
         h('button', { class: 'btn sm', onclick: async () => {
           try { const r = await api('PUT', `/api/forms/${f.id}/alias`, { alias: alias.value }); f.alias = r.alias; toast(r.alias ? 'Alias disimpan' : 'Alias dihapus'); draw(); } catch (e) { msg.style.color = 'var(--danger)'; msg.textContent = errMsg(e); }
         } }, 'Simpan')), msg,
@@ -250,7 +250,7 @@ export function shareExtras(c, fillUrl) {
       h('div', { class: 'col', style: { gap: '8px' } }, h('div', { class: 'small muted' }, 'QR untuk poster, slide, atau grup chat.'),
         h('a', { class: 'btn sm', href: `/api/forms/${f.id}/qr?kind=form&format=png&download=1&v=${encodeURIComponent(f.alias || f.slug)}`, download: '' }, icon('download', 14), 'Unduh PNG'),
         h('a', { class: 'btn sm', href: `/api/forms/${f.id}/qr?kind=form&format=svg&v=${encodeURIComponent(f.alias || f.slug)}`, download: `qr-${f.slug}.svg`, target: '_blank', rel: 'noopener' }, icon('download', 14), 'Unduh SVG'))));
-    const code = `<iframe src="${location.origin}/f/${f.alias || f.slug}?embed=1" width="100%" height="800" style="border:0" title="${(f.title || 'Formulir').replace(/"/g, '&quot;')}" loading="lazy"></iframe>`;
+    const code = `<iframe src="${location.origin}${urlWithBase('/f/' + (f.alias || f.slug))}?embed=1" width="100%" height="800" style="border:0" title="${(f.title || 'Formulir').replace(/"/g, '&quot;')}" loading="lazy"></iframe>`;
     wrap.append(h('h4', { style: { marginTop: '16px' } }, 'Sematkan (iframe)'),
       f.settings.allow_embed ? h('div', null, h('div', { class: 'codebox' }, code), h('div', { class: 'row', style: { marginTop: '6px' } }, h('button', { class: 'btn sm', onclick: () => copyText(code) }, icon('copy', 14), 'Salin kode')))
         : h('div', { class: 'row' }, h('span', { class: 'small muted grow' }, 'Penyematan belum diizinkan.'), h('button', { class: 'btn sm', onclick: () => { f.settings.allow_embed = true; c.touch(); draw(); } }, 'Izinkan penyematan')));

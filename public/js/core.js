@@ -215,7 +215,7 @@ export const fmtDate = (d) => (d ? new Date(d).toLocaleDateString(locale(), { da
 export const fmtMMSS = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); const hh = Math.floor(s / 3600); const mm = Math.floor((s % 3600) / 60); const ss = s % 60; return `${hh ? `${hh}:` : ''}${String(mm).padStart(hh ? 2 : 1, '0')}:${String(ss).padStart(2, '0')}`; };
 export const fmtDur = (min) => (min >= 60 ? `${Math.floor(min / 60)} jam${min % 60 ? ` ${min % 60} menit` : ''}` : `${min} menit`);
 export const num = (n) => (n === null || n === undefined ? '—' : Number(n).toLocaleString(locale(), { maximumFractionDigits: 2 }));
-export const fillUrl = (slug) => `${location.origin}/f/${slug}`;
+export const fillUrl = (slug) => `${location.origin}${urlWithBase('/f/' + slug)}`;
 export async function copyText(text) {
   try { await navigator.clipboard.writeText(text); toast('Tautan disalin'); } catch {
     const t = h('textarea', { style: { position: 'fixed', opacity: 0 } }); t.value = text; document.body.append(t); t.select();

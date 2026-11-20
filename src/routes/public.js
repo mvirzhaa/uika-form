@@ -60,7 +60,7 @@ router.get('/forms/:slug', async (req, res) => {
       one_response: api.settings.one_response, show_score: api.settings.show_score,
       open_at: api.settings.open_at, close_at: api.settings.close_at,
       max_attempts: api.settings.one_response ? 1 : api.settings.max_attempts, pick_count: api.settings.pick_count,
-      anticheat: api.settings.anticheat, language: api.settings.language, allow_embed: api.settings.allow_embed,
+      anticheat: api.settings.anticheat, language: api.settings.language, allow_embed: api.settings.allow_embed, number_questions: api.settings.number_questions,
       allowlist: api.settings.allowlist.enabled, attendance: api.settings.attendance,
     },
     certificate: api.cert.enabled, me: req.user ? { name: req.user.name, email: req.user.email, identifier: req.user.identifier } : null,

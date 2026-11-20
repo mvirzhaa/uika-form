@@ -19,7 +19,7 @@ const DEFAULT_SETTINGS = {
   max_attempts: 0, score_policy: 'best', pick_count: 0,
   anticheat: { enabled: false, max_violations: 3, block_copy: true, fullscreen: false },
   attendance: { enabled: false, require_for_cert: false },
-  notify_owner: false, confirm_email: false, allow_embed: false, language: 'id',
+  notify_owner: false, confirm_email: false, allow_embed: false, language: 'id', number_questions: true,
 };
 const DEFAULT_CERT = {
   enabled: false, title: 'SERTIFIKAT', subtitle: 'Diberikan kepada',
@@ -83,6 +83,7 @@ function cleanSettings(s = {}) {
     confirm_email: bool(s.confirm_email),
     allow_embed: bool(s.allow_embed),
     language: oneOf(s.language, ['id', 'en'], 'id'),
+    number_questions: bool(s.number_questions, true),
   };
   if (!out.is_quiz) { out.duration_min = 0; out.show_answers = false; out.anticheat.enabled = false; out.pick_count = 0; }
   if (out.allowlist.enabled && out.identity === 'none') out.identity = 'ask'; // daftar peserta butuh identitas

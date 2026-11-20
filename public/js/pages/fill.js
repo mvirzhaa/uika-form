@@ -136,7 +136,7 @@ export async function fillPage(root, { slug }, query) {
       const el = qEls.get(q.id); if (!el) continue;
       const show = visible.has(q.id);
       el.style.display = show ? '' : 'none';
-      if (show && q.type !== 'section') { n += 1; const numEl = el.querySelector('.num'); if (numEl) numEl.textContent = `${n}.`; }
+      if (show && q.type !== 'section') { n += 1; const numEl = el.querySelector('.num'); if (numEl) numEl.textContent = S.number_questions === false ? '' : `${n}.`; }
     }
     return visible;
   }

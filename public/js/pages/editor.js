@@ -259,7 +259,7 @@ export async function editorPage(root, { id }, query) {
     const card = h('div', { class: `q ${q.type === 'section' ? 'section' : ''}`, 'data-qid': q.id, tabindex: 0, onclick: () => { activeId = q.id; renderList(); }, onkeydown: (e) => { if (e.key === 'Enter' && e.target === card) { activeId = q.id; renderList(); } } });
     if (q.type === 'section') { card.append(h('div', { class: 'qt' }, q.title || 'Judul bagian'), q.description && h('div', { class: 'qd' }, q.description)); return card; }
     card.append(quiz && q.points > 0 && h('span', { class: 'pts' }, `${num(q.points)} poin`),
-      h('div', { class: 'qt' }, h('span', { class: 'num' }, `${n}.`), q.title || 'Pertanyaan tanpa judul', q.required && h('span', { class: 'req' }, '*')),
+      h('div', { class: 'qt' }, form.settings.number_questions !== false && h('span', { class: 'num' }, `${n}.`), q.title || 'Pertanyaan tanpa judul', q.required && h('span', { class: 'req' }, '*')),
       q.description && h('div', { class: 'qd' }, q.description),
       q.config.image && h('img', { class: 'qimg', src: `/uploads/${q.config.image}`, alt: '', style: { maxHeight: '140px' } }),
       h('div', { style: { marginTop: '10px' }, class: 'small muted' }, previewOf(q, quiz)),
@@ -474,6 +474,9 @@ export async function editorPage(root, { id }, query) {
       setting('Status', form.status === 'published' ? 'Peserta dapat mengisi' : 'Peserta belum dapat mengisi', sel(form.status, [['draft', 'Draf'], ['published', 'Dibuka'], ['closed', 'Ditutup']], (v) => { form.status = v; renderTop(); touch(); })),
       setting('Dibuka mulai', 'Kosongkan bila langsung', h('input', { class: 'in', type: 'datetime-local', style: { width: 'auto' }, value: toLocalInput(S.open_at), onchange: (e) => { S.open_at = fromLocalInput(e.target.value); touch(); } })),
       setting('Ditutup pada', 'Kosongkan bila tanpa batas', h('input', { class: 'in', type: 'datetime-local', style: { width: 'auto' }, value: toLocalInput(S.close_at), onchange: (e) => { S.close_at = fromLocalInput(e.target.value); touch(); } }))));
+
+    body.append(h('div', { class: 'card' }, h('h3', null, 'Tampilan soal'),
+      setting('Nomori soal otomatis', 'Matikan bila judul soal sudah bernomor sendiri (mis. A1, B1).', toggle(S.number_questions !== false, (v) => { S.number_questions = v; touch(); }))));
 
     body.append(h('div', { class: 'card' }, h('h3', null, 'Pesan konfirmasi'), h('p', { class: 'small muted' }, 'Tampil setelah peserta mengirim jawaban.'),
       h('textarea', { class: 'in', maxlength: 2000, value: S.confirmation_message, oninput: (e) => { S.confirmation_message = e.target.value; touch(); } })));

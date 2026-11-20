@@ -62,3 +62,13 @@ Teruskan `Host` dan `X-Forwarded-For/Proto`, set `TRUST_PROXY=1`, dan pastikan `
 - Font sertifikat bawaan PDFKit (Latin-1); karakter di luar itu perlu font tambahan.
 - Pengiriman email membutuhkan SMTP; tanpa SMTP, tombol kirim menjawab 503 dan unduh PDF tetap bisa.
 - Menghapus/mengganti teks item daftar pilihan mengubah id item; jawaban lama pada item itu tidak lagi terpetakan ke teksnya.
+
+## Seed form dari kuesioner (SQL)
+
+`scripts/seed-kuesioner-dosen.js` menghasilkan `seeds/kuesioner-pra-dosen.sql` — form "Kuesioner Pra-Penelitian untuk Dosen" (identitas, A1–A8, kisi B1–B8, C1–C2) siap dijalankan ke database server:
+
+1. Pemilik form harus sudah pernah login (ada di tabel `users`).
+2. Ubah `owner_email` (dan `status`) di bagian `CREATE TEMP TABLE _seed_cfg` pada berkas SQL, atau buat ulang: `node scripts/seed-kuesioner-dosen.js --owner email@uika-bogor.ac.id --status draft`.
+3. `psql "$DATABASE_URL" -f seeds/kuesioner-pra-dosen.sql`
+
+Aman dijalankan ulang (dilewati bila slug `kuesioner-dosen-esai` sudah ada). Tautan: `/s/kuesioner-dosen-esai`. Form memakai pengaturan "Nomori soal otomatis" = mati karena judul soal sudah bernomor (A1, B1, …).

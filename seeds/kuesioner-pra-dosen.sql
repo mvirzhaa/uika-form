@@ -15,7 +15,7 @@
 BEGIN;
 
 CREATE TEMP TABLE _seed_cfg ON COMMIT DROP AS
-  SELECT 'GANTI_DENGAN_EMAIL_AKUN_ANDA@uika-bogor.ac.id'::text   AS owner_email,   -- <== GANTI: email akun pemilik form (akun E-Portal)
+  SELECT 'muhamadvirzhaa@gmail.com'::text   AS owner_email,   -- <== email akun pemilik form
          'published'::text AS status;         -- 'published' = langsung bisa diisi, 'draft' = periksa dulu di Editor
 
 DO $seed$

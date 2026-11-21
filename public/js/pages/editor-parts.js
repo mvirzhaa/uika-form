@@ -217,7 +217,7 @@ export function attendanceCard(c) {
           h('div', { class: 'tiny muted', style: { marginTop: '8px' } }, 'Tampilkan QR ini di layar/proyektor atau cetak di meja registrasi.'))));
       const name = h('input', { class: 'in', placeholder: 'Nama' }); const email = h('input', { class: 'in', type: 'email', placeholder: 'Email' });
       host.append(h('div', { class: 'row wrap', style: { marginTop: '14px' } }, h('b', { class: 'grow' }, `${d.total} hadir`),
-        h('a', { class: 'btn sm', href: `/api/forms/${c.form.id}/export.xlsx` }, icon('download', 14), 'Excel (sheet Kehadiran)')));
+        h('a', { class: 'btn sm', href: urlWithBase(`/api/forms/${c.form.id}/export.xlsx`) }, icon('download', 14), 'Excel (sheet Kehadiran)')));
       host.append(h('div', { class: 'row wrap', style: { marginTop: '8px' } }, name, email, h('button', { class: 'btn sm', onclick: async () => {
         try { await api('POST', `/api/forms/${c.form.id}/checkins`, { name: name.value, email: email.value }); toast('Kehadiran dicatat'); d = await api('GET', `/api/forms/${c.form.id}/checkins`); draw(); } catch (e) { toast(errMsg(e), 'err'); }
       } }, icon('plus', 14), 'Catat manual')));
@@ -246,10 +246,10 @@ export function shareExtras(c, fillUrl) {
         } }, 'Simpan')), msg,
       h('div', { class: 'row', style: { marginTop: '6px' } }, h('input', { class: 'in', readOnly: true, value: shortUrl(), onfocus: (e) => e.target.select() }), h('button', { class: 'btn', onclick: () => copyText(shortUrl()) }, icon('copy', 16))));
     wrap.append(h('div', { class: 'row wrap', style: { alignItems: 'flex-start', gap: '16px', marginTop: '14px' } },
-      h('div', { class: 'qrbox', style: { width: '160px', height: '160px' } }, h('img', { src: `/api/forms/${f.id}/qr?kind=form&format=svg&v=${encodeURIComponent(f.alias || f.slug)}`, alt: 'QR formulir' })),
+      h('div', { class: 'qrbox', style: { width: '160px', height: '160px' } }, h('img', { src: urlWithBase(`/api/forms/${f.id}/qr?kind=form&format=svg&v=${encodeURIComponent(f.alias || f.slug)}`), alt: 'QR formulir' })),
       h('div', { class: 'col', style: { gap: '8px' } }, h('div', { class: 'small muted' }, 'QR untuk poster, slide, atau grup chat.'),
-        h('a', { class: 'btn sm', href: `/api/forms/${f.id}/qr?kind=form&format=png&download=1&v=${encodeURIComponent(f.alias || f.slug)}`, download: '' }, icon('download', 14), 'Unduh PNG'),
-        h('a', { class: 'btn sm', href: `/api/forms/${f.id}/qr?kind=form&format=svg&v=${encodeURIComponent(f.alias || f.slug)}`, download: `qr-${f.slug}.svg`, target: '_blank', rel: 'noopener' }, icon('download', 14), 'Unduh SVG'))));
+        h('a', { class: 'btn sm', href: urlWithBase(`/api/forms/${f.id}/qr?kind=form&format=png&download=1&v=${encodeURIComponent(f.alias || f.slug)}`), download: '' }, icon('download', 14), 'Unduh PNG'),
+        h('a', { class: 'btn sm', href: urlWithBase(`/api/forms/${f.id}/qr?kind=form&format=svg&v=${encodeURIComponent(f.alias || f.slug)}`), download: `qr-${f.slug}.svg`, target: '_blank', rel: 'noopener' }, icon('download', 14), 'Unduh SVG'))));
     const code = `<iframe src="${location.origin}${urlWithBase('/f/' + (f.alias || f.slug))}?embed=1" width="100%" height="800" style="border:0" title="${(f.title || 'Formulir').replace(/"/g, '&quot;')}" loading="lazy"></iframe>`;
     wrap.append(h('h4', { style: { marginTop: '16px' } }, 'Sematkan (iframe)'),
       f.settings.allow_embed ? h('div', null, h('div', { class: 'codebox' }, code), h('div', { class: 'row', style: { marginTop: '6px' } }, h('button', { class: 'btn sm', onclick: () => copyText(code) }, icon('copy', 14), 'Salin kode')))
@@ -362,7 +362,7 @@ export function bulkSendCard(c) {
     if (d.rows.length) body.append(h('div', { class: 'scroll-y', style: { marginTop: '10px' } }, h('table', { class: 't' }, h('tbody', null, d.rows.slice(0, 200).map((r) => h('tr', null,
       h('td', null, h('b', null, r.name), h('div', { class: 'tiny muted' }, [r.number, r.email].filter(Boolean).join(' · '))),
       h('td', { style: { textAlign: 'right' } }, r.emailed_at ? h('span', { class: 'pill ok' }, 'Terkirim') : h('span', { class: 'pill' }, 'Belum')),
-      h('td', { style: { width: '70px' } }, h('a', { class: 'btn sm ghost', href: `/api/public/certificates/${r.code}/pdf?download=1` }, 'PDF'))))))));
+      h('td', { style: { width: '70px' } }, h('a', { class: 'btn sm ghost', href: urlWithBase(`/api/public/certificates/${r.code}/pdf?download=1`) }, 'PDF'))))))));
     async function watch() {
       stop();
       const tick = async () => {

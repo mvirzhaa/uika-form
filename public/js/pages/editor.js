@@ -168,7 +168,7 @@ export async function editorPage(root, { id }, query) {
     const holder = h('div', { class: 'drop' });
     const paint = () => {
       clear(holder);
-      holder.append(id ? h('img', { src: `/uploads/${id}`, alt: label }) : h('div', { class: 'none' }, icon('image')),
+      holder.append(id ? h('img', { src: urlWithBase(`/uploads/${id}`), alt: label }) : h('div', { class: 'none' }, icon('image')),
         h('div', { class: 'grow' }, h('b', { class: 'small' }, label), hint && h('div', { class: 'tiny muted' }, hint)),
         h('button', { class: 'btn sm', onclick: async () => { const nid = await uploadImage(); if (nid) { id = nid; onSet(nid); paint(); } } }, icon('upload', 16), id ? 'Ganti' : 'Unggah'),
         id && h('button', { class: 'btn sm icon ghost', title: 'Hapus', onclick: () => { id = null; onSet(null); paint(); } }, icon('x', 16)));
@@ -261,7 +261,7 @@ export async function editorPage(root, { id }, query) {
     card.append(quiz && q.points > 0 && h('span', { class: 'pts' }, `${num(q.points)} poin`),
       h('div', { class: 'qt' }, form.settings.number_questions !== false && h('span', { class: 'num' }, `${n}.`), q.title || 'Pertanyaan tanpa judul', q.required && h('span', { class: 'req' }, '*')),
       q.description && h('div', { class: 'qd' }, q.description),
-      q.config.image && h('img', { class: 'qimg', src: `/uploads/${q.config.image}`, alt: '', style: { maxHeight: '140px' } }),
+      q.config.image && h('img', { class: 'qimg', src: urlWithBase(`/uploads/${q.config.image}`), alt: '', style: { maxHeight: '140px' } }),
       h('div', { style: { marginTop: '10px' }, class: 'small muted' }, previewOf(q, quiz)),
       (q.config.show_if || q.config.always) && h('div', { class: 'row wrap', style: { marginTop: '8px', gap: '6px' } }, q.config.show_if && h('span', { class: 'tag' }, icon('branch', 12), 'Logika tampil'), q.config.always && h('span', { class: 'tag' }, 'Selalu disertakan')));
     return card;

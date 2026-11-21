@@ -32,7 +32,7 @@ export async function dashboardPage(root) {
   for (const f of forms) {
     const [label, cls] = STATUS[f.status];
     const band = h('div', { class: 'band', style: f.theme.header_style === 'image' && f.theme.header_image
-      ? { backgroundImage: `url(/uploads/${f.theme.header_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+      ? { backgroundImage: `url(${urlWithBase(`/uploads/${f.theme.header_image}`)})`, backgroundSize: 'cover', backgroundPosition: 'center' }
       : { background: f.theme.header_style === 'solid' ? f.theme.color : `linear-gradient(135deg, ${f.theme.color}, color-mix(in srgb, ${f.theme.color} 55%, #5e17eb))` } },
     h('span', { class: `pill ${cls}` }, label));
     const card = h('div', { class: 'fcard', tabindex: 0, role: 'link', onclick: (e) => { if (!e.target.closest('button')) navigate(`/forms/${f.id}/edit`); }, onkeydown: (e) => { if (e.key === 'Enter') navigate(`/forms/${f.id}/edit`); } },

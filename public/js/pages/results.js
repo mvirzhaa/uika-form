@@ -1,5 +1,5 @@
 /* Tab Respons di Editor: Ringkasan (grafik), Pertanyaan (satu per satu), Individual (jawaban per peserta + penilaian esai). */
-import { h, clear, icon, api, toast, confirmDialog, debounce, loadChart, PALETTE, fmtDateTime, num, errMsg } from '../core.js';
+import { h, clear, icon, api, toast, confirmDialog, debounce, loadChart, PALETTE, fmtDateTime, num, errMsg, urlWithBase } from '../core.js';
 
 const STATUS = { submitted: ['Terkirim', 'ok'], auto_submitted: ['Otomatis (waktu habis)', 'warn'], in_progress: ['Belum selesai', ''] };
 
@@ -22,8 +22,8 @@ export function responsesTab(host, form, ctx) {
     head.append(h('div', { class: 'row wrap', style: { margin: '14px 0' } },
       h('div', { class: 'grow' }, h('h2', null, `${summary ? summary.total : '…'} respons`), summary?.in_progress ? h('div', { class: 'small muted' }, `${summary.in_progress} sedang mengerjakan`) : null),
       h('button', { class: 'btn icon', title: 'Muat ulang', onclick: async () => { await loadSummary(); drawHead(); draw(); } }, icon('refresh')),
-      h('a', { class: 'btn', href: `/api/forms/${form.id}/report.pdf` }, icon('file', 16), 'Laporan PDF'),
-      h('a', { class: 'btn', href: `/api/forms/${form.id}/export.xlsx` }, icon('download', 16), 'Unduh Excel')),
+      h('a', { class: 'btn', href: urlWithBase(`/api/forms/${form.id}/report.pdf`) }, icon('file', 16), 'Laporan PDF'),
+      h('a', { class: 'btn', href: urlWithBase(`/api/forms/${form.id}/export.xlsx`) }, icon('download', 16), 'Unduh Excel')),
     h('div', { style: { display: 'flex', justifyContent: 'center', marginBottom: '14px' } }, h('div', { class: 'seg seg-fill' }, t('summary', 'Ringkasan', 'chart'), t('question', 'Pertanyaan', 'list'), t('individual', 'Individual', 'user'))));
   }
 
@@ -185,7 +185,7 @@ export function responsesTab(host, form, ctx) {
       const row = h('div', { style: { padding: '14px 0', borderTop: '.5px solid var(--line)' } },
         h('div', { class: 'row', style: { alignItems: 'flex-start' } }, h('b', { class: 'grow' }, `${i + 1}. ${it.title || '(tanpa judul)'}`), quiz && mark, quiz && it.points_max > 0 && h('span', { class: 'pill' }, `${num(it.points)}/${num(it.points_max)}`)),
         h('div', { style: { marginTop: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', background: 'var(--card-2)', borderRadius: '12px', padding: '10px 12px' } },
-          it.file_id ? h('div', { class: 'row wrap' }, icon('file', 16), h('span', { class: 'grow' }, it.answer), h('a', { class: 'btn sm', href: `/api/forms/${form.id}/files/${it.file_id}` }, icon('download', 14), 'Unduh')) : (it.answer || h('span', { class: 'muted' }, '— tidak dijawab —'))));
+          it.file_id ? h('div', { class: 'row wrap' }, icon('file', 16), h('span', { class: 'grow' }, it.answer), h('a', { class: 'btn sm', href: urlWithBase(`/api/forms/${form.id}/files/${it.file_id}`) }, icon('download', 14), 'Unduh')) : (it.answer || h('span', { class: 'muted' }, '— tidak dijawab —'))));
       if (quiz && it.manual) {
         const gi = h('input', { class: 'in', type: 'number', min: 0, max: it.points_max, step: 'any', value: it.graded_manually ? it.points : '', placeholder: '0', style: { width: '90px', padding: '6px 10px' } });
         gradeInputs.set(it.id, gi);
@@ -206,7 +206,7 @@ export function responsesTab(host, form, ctx) {
       const certRow = h('div', { class: 'certbox', style: { marginTop: '14px' } }, h('div', { class: 'ico' }, icon('award', 22)));
       if (d.cert_code) {
         certRow.append(h('div', { class: 'grow' }, h('b', null, 'Sertifikat terbit'), h('div', { class: 'small muted' }, d.cert_code)),
-          h('a', { class: 'btn sm', href: `/api/public/certificates/${d.cert_code}/pdf?download=1` }, icon('download', 16), 'PDF'),
+          h('a', { class: 'btn sm', href: urlWithBase(`/api/public/certificates/${d.cert_code}/pdf?download=1`) }, icon('download', 16), 'PDF'),
           h('button', { class: 'btn sm primary', disabled: !d.email, title: d.email ? '' : 'Peserta tidak punya email', onclick: async (ev) => { ev.target.disabled = true; try { await api('POST', `/api/forms/${form.id}/responses/${rid}/certificate/email`); toast(`Terkirim ke ${d.email}`); } catch (e) { toast(errMsg(e), 'err'); } ev.target.disabled = false; } }, icon('mail', 16), 'Kirim email'));
       } else certRow.append(h('div', { class: 'grow' }, h('b', null, 'Belum ada sertifikat'), h('div', { class: 'small muted' }, d.status === 'in_progress' ? 'Peserta belum mengirim.' : !d.graded ? 'Menunggu penilaian esai.' : `Nilai di bawah batas ${form.cert.min_percent}%.`)));
       card.append(certRow);

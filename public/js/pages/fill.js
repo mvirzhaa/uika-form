@@ -1,6 +1,6 @@
 /* MODE PENGISIAN — tampilan yang dilihat peserta (juga dipakai sebagai pratinjau dari Editor). */
 import { h, clear, icon, api, ApiError, session, navbar, userMenu, link, toast, modal, confirmDialog, debounce, applyTheme, canvasBg, currentTheme, setPageTheme, heroClass, heroStyle,
-  loginUrl, fmtMMSS, fmtDur, fmtDateTime, num, errMsg, logo } from '../core.js';
+  loginUrl, fmtMMSS, fmtDur, fmtDateTime, num, errMsg, logo, urlWithBase } from '../core.js';
 import { applyLogic, isAnswered } from '../logic.js';
 import { setLang } from '../i18n.js';
 
@@ -308,7 +308,7 @@ export async function fillPage(root, { slug }, query) {
       quiz && q.points > 0 && h('span', { class: 'pts' }, `${num(q.points)} poin`),
       h('div', { class: 'qt' }, h('span', { class: 'num' }, ''), q.title || 'Pertanyaan', q.required && h('span', { class: 'req', title: 'Wajib diisi' }, '*')),
       q.description && h('div', { class: 'qd' }, q.description),
-      q.config?.image && h('img', { class: 'qimg', src: `/uploads/${q.config.image}`, alt: '', loading: 'lazy' }),
+      q.config?.image && h('img', { class: 'qimg', src: urlWithBase(`/uploads/${q.config.image}`), alt: '', loading: 'lazy' }),
       h('div', { style: { marginTop: '12px' } }, input(q)));
     qEls.set(q.id, el);
     return el;
@@ -554,7 +554,7 @@ export async function fillPage(root, { slug }, query) {
         } }, icon('mail'), 'Kirim ke email');
         content.append(h('div', { class: 'certbox', style: { margin: '14px 0' } }, h('div', { class: 'ico' }, icon('award', 24)),
           h('div', { class: 'grow' }, h('b', null, 'Sertifikat Anda sudah terbit'), h('div', { class: 'small muted' }, `${c.number ? `Nomor ${c.number} · ` : ''}Kode verifikasi: ${c.code}`)),
-          h('a', { class: 'btn primary', href: `/api/public/certificates/${c.code}/pdf?download=1` }, icon('download'), 'Unduh PDF'), emailBtn,
+          h('a', { class: 'btn primary', href: urlWithBase(`/api/public/certificates/${c.code}/pdf?download=1`) }, icon('download'), 'Unduh PDF'), emailBtn,
           h('a', { class: 'btn ghost', href: `/verify/${c.code}`, 'data-link': '' }, 'Verifikasi')));
       } else if (c.needs_attendance) {
         content.append(h('div', { class: 'card small' }, icon('qr'), ' Sertifikat terbit setelah kehadiran Anda tercatat. Pindai kode QR absensi di lokasi kegiatan dengan email yang sama, lalu muat ulang halaman ini.'));

@@ -95,7 +95,7 @@ export async function openCertDesigner(c, { onClose } = {}) {
   /* ---------- pratinjau halaman ---------- */
   function paintPage() {
     clear(page);
-    page.style.background = C.bg_image ? `${C.bg_color || '#fff'} url(/uploads/${C.bg_image}) center/100% 100% no-repeat` : (C.bg_color || '#ffffff');
+    page.style.background = C.bg_image ? `${C.bg_color || '#fff'} url(${urlWithBase(`/uploads/${C.bg_image}`)}) center/100% 100% no-repeat` : (C.bg_color || '#ffffff');
     page.style.setProperty('--cd-accent', C.accent || '#0071e3');
     if (!C.bg_image) page.insertAdjacentHTML('beforeend', frameSvg(C.template || 'classic', C.accent || '#0071e3'));
     const v = vars();
@@ -117,12 +117,12 @@ export async function openCertDesigner(c, { onClose } = {}) {
       el.style.top = `${e.y}%`; el.style.height = `${e.size}cqw`;
       const id = getPath(C, meta.src);
       if (key === 'sponsor_br' && C.sponsor_label) el.append(h('div', { class: 'cd-label', style: { textAlign: e.align, color } }, C.sponsor_label.toUpperCase()));
-      el.append(id ? h('img', { src: `/uploads/${id}`, alt: '', draggable: false, style: { objectPosition: `${e.align} center` } }) : h('div', { class: 'cd-ph', style: { justifyContent: { left: 'flex-start', right: 'flex-end', center: 'center' }[e.align] } }, h('span', null, meta.label.replace(/^Logo sponsor "Didukung oleh"$/, 'Logo sponsor'))));
+      el.append(id ? h('img', { src: urlWithBase(`/uploads/${id}`), alt: '', draggable: false, style: { objectPosition: `${e.align} center` } }) : h('div', { class: 'cd-ph', style: { justifyContent: { left: 'flex-start', right: 'flex-end', center: 'center' }[e.align] } }, h('span', null, meta.label.replace(/^Logo sponsor "Didukung oleh"$/, 'Logo sponsor'))));
       return el;
     }
     if (meta.kind === 'qr') {
       el.style.top = `${e.y}%`; el.style.height = `${e.size}cqw`; el.classList.add('cd-qr');
-      el.append(h('img', { src: `/api/forms/${form.id}/qr?kind=form&format=svg`, alt: 'QR', draggable: false }));
+      el.append(h('img', { src: urlWithBase(`/api/forms/${form.id}/qr?kind=form&format=svg`), alt: 'QR', draggable: false }));
       return el;
     }
     const font = e.font === 'serif' ? 'serif' : 'sans';
